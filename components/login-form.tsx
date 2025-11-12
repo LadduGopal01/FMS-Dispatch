@@ -3,6 +3,8 @@
 import type React from "react"
 
 import { useState } from "react"
+
+import { User, Lock } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -34,36 +36,38 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md p-8 shadow-lg">
-      <h1 className="text-3xl font-bold mb-2 text-foreground">Dispatch FMS</h1>
-      <p className="text-muted-foreground mb-8">Fleet Management System</p>
+<Card className="w-full max-w-md p-5 sm:p-8 shadow-lg border">
+<h1 className="text-2xl sm:text-3xl font-bold text-center text-foreground">Dispatch FMS</h1>
+<p className="text-muted-foreground text-center mb-1">Fleet Management System</p>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+<form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         {error && <div className="p-3 rounded-lg bg-destructive/10 text-destructive text-sm">{error}</div>}
 
-        <div>
-          <label className="block text-sm font-medium mb-2">Username</label>
+        <div className="relative">
+          <label className="block text-sm font-semibold mb-2">Username</label>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Enter username"
-            className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full pl-10 pr-4 py-2 border border-border rounded-lg shadow-sm focus:shadow-md focus:outline-none focus:ring-2 focus:ring-primary transition-shadow duration-200"
           />
+          <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/8 text-muted-foreground" />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium mb-2">Password</label>
+        <div className="relative">
+          <label className="block text-sm font-semibold mb-2">Password</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter password"
-            className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-full pl-10 pr-4 py-2 border border-border rounded-lg shadow-sm focus:shadow-md focus:outline-none focus:ring-2 focus:ring-primary transition-shadow duration-200"
           />
+          <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/8 text-muted-foreground" />
         </div>
 
-        <Button className="w-full" type="submit">
+<Button className="w-full shadow-md hover:shadow-lg transition-shadow duration-200" type="submit">
           Sign In
         </Button>
       </form>

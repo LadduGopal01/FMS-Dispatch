@@ -1,79 +1,136 @@
-"use client"
-
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { LayoutDashboard, FileText, Truck, CheckCircle, Gauge as Gate, Menu, X, LogOut } from "lucide-react"
+import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  LayoutDashboard,
+  FileText,
+  Truck,
+  CheckCircle,
+  Gauge,
+  Menu,
+  X,
+  LogOut,
+} from "lucide-react";
 
 export default function Sidebar() {
-  const pathname = usePathname()
-  const router = useRouter()
-  const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { label: "Indent", href: "/indent", icon: FileText },
     { label: "Loading Point", href: "/loading-point", icon: Truck },
     { label: "Loading Complete", href: "/loading-complete", icon: CheckCircle },
-    { label: "Gate Pass", href: "/gate-pass", icon: Gate },
-  ]
+    { label: "Gate Pass", href: "/gate-pass", icon: Gauge },
+  ];
 
   const handleLogout = () => {
-    localStorage.removeItem("user")
-    router.push("/")
-  }
+    alert("Logging out...");
+  };
 
   return (
     <>
-      {/* Mobile Menu Button */}
-      <div className="md:hidden fixed top-4 left-4 z-50">
-        <Button variant="outline" size="icon" onClick={() => setIsOpen(!isOpen)}>
+      {/* Mobile Menu Toggle */}
+      <div className="md:hidden fixed top-5 right-5 z-50">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setIsOpen(!isOpen)}
+          className="bg-white border-slate-300 text-slate-700 hover:bg-slate-50 shadow-lg"
+        >
           {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </Button>
       </div>
 
-      {/* Overlay */}
-      {isOpen && <div className="md:hidden fixed inset-0 bg-black/50 z-40" onClick={() => setIsOpen(false)} />}
+      {/* Backdrop Overlay */}
+      {isOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 transition-all duration-300"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed md:static top-0 left-0 h-screen w-64 bg-background text-foreground transition-transform duration-300 z-40 ${
-          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        } flex flex-col border-r border-border`}
+        className={`
+          fixed md:static inset-y-0 left-0 z-40 w-80
+          bg-white border-r border-slate-200
+          text-slate-900 shadow-lg
+          flex flex-col
+          transform transition-all duration-500 ease-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+        `}
       >
-        <div className="p-6 border-b border-border">
-          <h2 className="text-2xl font-bold text-primary">FMS</h2>
-          <p className="text-sm text-muted-foreground">Fleet Management</p>
+        {/* Header */}
+        <div className="p-6 border-b border-slate-200 bg-slate-50">
+          <h2 className="text-4xl font-bold text-slate-900 mb-1">
+            FMS
+          </h2>
+          <p className="text-sm font-medium text-slate-600">
+            Fleet Management System
+          </p>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2">
+        {/* Navigation */}
+        <nav className="flex-1 p-5 space-y-2 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-300">
           {navItems.map((item) => {
-            const Icon = item.icon
-            const isActive = pathname === item.href
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+
             return (
-              <Link key={item.href} href={item.href}>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                    isActive ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-accent/20"
-                  }`}
+              <button
+                key={item.href}
+                onClick={() => {
+                  router.push(item.href);
+                  setIsOpen(false);
+                }}
+                className="w-full"
+              >
+                <div
+                  className={`
+                    group relative flex items-center gap-3 px-4 py-4 rounded-xl
+                    font-semibold text-sm transition-all duration-200 cursor-pointer
+                    overflow-hidden
+                    ${
+                      isActive
+                        ? "bg-blue-600 text-white shadow-md"
+                        : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
+                    }
+                  `}
                 >
-                  <Icon className="w-5 h-5" />
-                  <span className="text-sm font-medium">{item.label}</span>
-                </button>
-              </Link>
-            )
+                  <div className="relative z-10">
+                    <Icon
+                      className={`w-6 h-6 transition-all duration-300 ${
+                        isActive
+                          ? "text-white"
+                          : "text-slate-500 group-hover:text-slate-700"
+                      }`}
+                    />
+                  </div>
+
+                  {/* Label */}
+                  <span className="relative z-10">{item.label}</span>
+                </div>
+              </button>
+            );
           })}
         </nav>
 
-        <div className="p-4 border-t border-border">
-          <Button variant="outline" className="w-full bg-transparent" onClick={handleLogout}>
+        {/* Logout Section */}
+        <div className="p-5 border-t border-slate-200 bg-slate-50">
+          <Button
+            onClick={handleLogout}
+            className="w-full h-12 bg-slate-200 border border-slate-300 text-slate-700 hover:bg-red-50 hover:text-red-600 hover:border-red-300 font-semibold text-sm transition-all duration-200 rounded-xl"
+          >
             <LogOut className="w-4 h-4 mr-2" />
             Logout
           </Button>
         </div>
+
+        {/* Decorative Bottom */}
+        <div className="h-1 bg-slate-200" />
       </aside>
     </>
-  )
+  );
 }
