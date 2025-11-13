@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -38,8 +37,11 @@ export default function LoadingCompleteModal({
 
   const isViewMode = initialData?.isViewMode || false;
 
+  /* ------------------------------------------------------------------ */
+  /*  Reset form when modal opens / initialData changes                 */
+  /* ------------------------------------------------------------------ */
   useEffect(() => {
-    if (initialData) {
+    if (initialData && isOpen) {
       setFormData({
         indentNo: initialData.indentNo || "",
         unloadingMunsiName: initialData.unloadingMunsiName || "",
@@ -58,6 +60,9 @@ export default function LoadingCompleteModal({
     }
   }, [initialData, isOpen]);
 
+  /* ------------------------------------------------------------------ */
+  /*  Submit handler                                                    */
+  /* ------------------------------------------------------------------ */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.driverName || !formData.status2) {
@@ -65,6 +70,7 @@ export default function LoadingCompleteModal({
       return;
     }
     onSubmit(formData);
+    // reset for next open
     setFormData({
       indentNo: "",
       unloadingMunsiName: "",
@@ -80,252 +86,302 @@ export default function LoadingCompleteModal({
       packetName: "",
       status2: "",
     });
+    onClose();
   };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-0 md:p-4">
-      <Card className="w-full h-full md:max-w-2xl md:max-h-[90vh] md:h-auto overflow-y-auto rounded-none md:rounded-lg">
-        <div className="flex items-center justify-between p-10 border-b border-border sticky top-0 bg-card">
+      {/* -------------------------------------------------------------- */}
+      {/* Card – full height on mobile, max‑height on larger screens    */}
+      {/* -------------------------------------------------------------- */}
+      <Card className="w-full h-[95dvh] md:max-w-2xl md:max-h-[90vh] md:h-auto flex flex-col overflow-hidden rounded-none md:rounded-lg shadow-lg">
+        {/* ==================== STICKY HEADER ==================== */}
+        <header className="sticky top-0 z-20 flex items-center justify-between p-4 border-b border-border bg-card shadow-sm">
           <h2 className="text-xl font-bold">
             {isViewMode ? "View Loading Complete" : "Mark Loading Complete"}
           </h2>
           <button
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
-        </div>
+        </header>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Indent No</label>
-              <input
-                type="text"
-                placeholder="Enter indent number"
-                value={formData.indentNo}
-                disabled
-                className="w-full px-4 py-2 border border-border rounded-lg bg-muted"
-              />
+        {/* ==================== SCROLLABLE FORM ==================== */}
+        <form
+          id="loading-complete-form"
+          onSubmit={handleSubmit}
+          className="flex-1 overflow-y-auto px-4 md:px-6 pt-4 pb-20 md:pb-6"
+        >
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* ---------- Indent No (disabled) ---------- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Indent No</label>
+                <input
+                  type="text"
+                  placeholder="Enter indent number"
+                  value={formData.indentNo}
+                  disabled
+                  className="w-full px-4 py-2 border border-border rounded-lg bg-muted"
+                />
+              </div>
+
+              {/* ---------- Munsi Name ---------- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Munsi Name</label>
+                <select
+                  value={formData.unloadingMunsiName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, unloadingMunsiName: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : "bg-white"
+                  }`}
+                >
+                  <option value="">Select Munsi Name</option>
+                  <option value="FM PANDA">FM PANDA</option>
+                  <option value="SAHOO">SAHOO</option>
+                  <option value="SUMAN">SUMAN</option>
+                  <option value="KASHA">KASHA</option>
+                  <option value="TULSI">TULSI</option>
+                  <option value="BANCHHOR">BANCHHOR</option>
+                  <option value="VINAY">VINAY</option>
+                </select>
+              </div>
+
+              {/* ---------- Party Name ---------- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Party Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter party name"
+                  value={formData.partyName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, partyName: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+
+              {/* ---------- Vehicle No ---------- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Vehicle No</label>
+                <input
+                  type="text"
+                  placeholder="Enter vehicle number"
+                  value={formData.vehicleNo}
+                  onChange={(e) =>
+                    setFormData({ ...formData, vehicleNo: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+
+              {/* ---------- Driver Name (required) ---------- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Driver Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter driver name"
+                  value={formData.driverName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, driverName: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+
+              {/* ---------- Commodity ---------- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Commodity</label>
+                <input
+                  type="text"
+                  placeholder="Enter commodity"
+                  value={formData.commodity}
+                  onChange={(e) =>
+                    setFormData({ ...formData, commodity: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+
+              {/* ---------- Quality ---------- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Quality</label>
+                <input
+                  type="text"
+                  placeholder="Enter quality"
+                  value={formData.quality}
+                  onChange={(e) =>
+                    setFormData({ ...formData, quality: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+
+              {/* ---------- No. of PKTS ---------- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">No. of PKTS</label>
+                <input
+                  type="text"
+                  placeholder="Enter number of packets"
+                  value={formData.pkts}
+                  onChange={(e) =>
+                    setFormData({ ...formData, pkts: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+
+              {/* ---------- Bharti Size ---------- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Bharti Size</label>
+                <input
+                  type="text"
+                  placeholder="Enter bharti size"
+                  value={formData.bhartiSize}
+                  onChange={(e) =>
+                    setFormData({ ...formData, bhartiSize: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+
+              {/* ---------- Quantity ---------- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Quantity</label>
+                <input
+                  type="text"
+                  placeholder="Enter quantity"
+                  value={formData.quantity}
+                  onChange={(e) =>
+                    setFormData({ ...formData, quantity: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+
+              {/* ---------- Packet Type ---------- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Packet Type</label>
+                <input
+                  type="text"
+                  placeholder="Enter packet type"
+                  value={formData.packetType}
+                  onChange={(e) =>
+                    setFormData({ ...formData, packetType: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+
+              {/* ---------- Packet Name ---------- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Packet Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter packet name"
+                  value={formData.packetName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, packetName: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
             </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Munsi Name</label>
+
+            {/* ---------- Status (required) ---------- */}
+            <div className="md:col-span-2 space-y-1">
+              <label className="text-sm font-medium">Status</label>
               <select
-                value={formData.unloadingMunsiName}
+                value={formData.status2}
                 onChange={(e) =>
-                  setFormData({ ...formData, unloadingMunsiName: e.target.value })
+                  setFormData({ ...formData, status2: e.target.value })
                 }
                 disabled={isViewMode}
-                className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
+                className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
                   isViewMode ? "bg-muted" : "bg-white"
                 }`}
               >
-                <option value="">Select Munsi Name</option>
-                <option value="FM PANDA">FM PANDA</option>
-                <option value="SAHOO">SAHOO</option>
-                <option value="SUMAN">SUMAN</option>
-                <option value="KASHA">KASHA</option>
-                <option value="TULSI">TULSI</option>
-                <option value="BANCHHOR">BANCHHOR</option>
-                <option value="VINAY">VINAY</option>
+                <option value="">Select status</option>
+                <option value="Loading">Loading</option>
+                <option value="Completed">Completed</option>
               </select>
             </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Party Name</label>
-              <input
-                type="text"
-                placeholder="Enter party name"
-                value={formData.partyName}
-                onChange={(e) =>
-                  setFormData({ ...formData, partyName: e.target.value })
-                }
-                disabled={isViewMode}
-                className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                  isViewMode ? "bg-muted" : ""
-                }`}
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Vehicle No</label>
-              <input
-                type="text"
-                placeholder="Enter vehicle number"
-                value={formData.vehicleNo}
-                onChange={(e) =>
-                  setFormData({ ...formData, vehicleNo: e.target.value })
-                }
-                disabled={isViewMode}
-                className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                  isViewMode ? "bg-muted" : ""
-                }`}
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Driver Name</label>
-              <input
-                type="text"
-                placeholder="Enter driver name"
-                value={formData.driverName}
-                onChange={(e) =>
-                  setFormData({ ...formData, driverName: e.target.value })
-                }
-                disabled={isViewMode}
-                className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                  isViewMode ? "bg-muted" : ""
-                }`}
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Commodity</label>
-              <input
-                type="text"
-                placeholder="Enter commodity"
-                value={formData.commodity}
-                onChange={(e) =>
-                  setFormData({ ...formData, commodity: e.target.value })
-                }
-                disabled={isViewMode}
-                className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                  isViewMode ? "bg-muted" : ""
-                }`}
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Quality</label>
-              <input
-                type="text"
-                placeholder="Enter quality"
-                value={formData.quality}
-                onChange={(e) =>
-                  setFormData({ ...formData, quality: e.target.value })
-                }
-                disabled={isViewMode}
-                className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                  isViewMode ? "bg-muted" : ""
-                }`}
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium">No. of PKTS</label>
-              <input
-                type="text"
-                placeholder="Enter number of packets"
-                value={formData.pkts}
-                onChange={(e) =>
-                  setFormData({ ...formData, pkts: e.target.value })
-                }
-                disabled={isViewMode}
-                className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                  isViewMode ? "bg-muted" : ""
-                }`}
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Bharti Size</label>
-              <input
-                type="text"
-                placeholder="Enter bharti size"
-                value={formData.bhartiSize}
-                onChange={(e) =>
-                  setFormData({ ...formData, bhartiSize: e.target.value })
-                }
-                disabled={isViewMode}
-                className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                  isViewMode ? "bg-muted" : ""
-                }`}
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Quantity</label>
-              <input
-                type="text"
-                placeholder="Enter quantity"
-                value={formData.quantity}
-                onChange={(e) =>
-                  setFormData({ ...formData, quantity: e.target.value })
-                }
-                disabled={isViewMode}
-                className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                  isViewMode ? "bg-muted" : ""
-                }`}
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Packet Type</label>
-              <input
-                type="text"
-                placeholder="Enter packet type"
-                value={formData.packetType}
-                onChange={(e) =>
-                  setFormData({ ...formData, packetType: e.target.value })
-                }
-                disabled={isViewMode}
-                className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                  isViewMode ? "bg-muted" : ""
-                }`}
-              />
-            </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Packet Name</label>
-              <input
-                type="text"
-                placeholder="Enter packet name"
-                value={formData.packetName}
-                onChange={(e) =>
-                  setFormData({ ...formData, packetName: e.target.value })
-                }
-                disabled={isViewMode}
-                className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                  isViewMode ? "bg-muted" : ""
-                }`}
-              />
-            </div>
           </div>
+        </form>
 
-          <div className="space-y-1 md:col-span-2">
-            <label className="text-sm font-medium">Status</label>
-            <select
-              value={formData.status2}
-              onChange={(e) =>
-                setFormData({ ...formData, status2: e.target.value })
-              }
-              disabled={isViewMode}
-              className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-                isViewMode ? "bg-muted" : "bg-white"
-              }`}
-            >
-              <option value="">Select status</option>
-              <option value="Loading">Loading</option>
-              <option value="Completed">Completed</option>
-            </select>
-          </div>
-
-          <div className="flex gap-3 pt-4">
+        {/* ==================== STICKY FOOTER ==================== */}
+        <footer className="sticky bottom-0 z-20 border-t border-border bg-card p-4 shadow-lg">
+          <div className="flex gap-3 pb-[max(env(safe-area-inset-bottom),1rem)]">
+            {/* ----- Edit mode buttons ----- */}
             {!isViewMode && (
               <>
-                <Button type="submit" className="flex-1">
+                <Button
+                  type="submit"
+                  form="loading-complete-form"
+                  className="flex-1 shadow-md hover:shadow-lg transition-shadow"
+                >
                   Mark Complete
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   onClick={onClose}
-                  className="flex-1 bg-transparent"
+                  className="flex-1 bg-transparent shadow-md hover:shadow-lg transition-shadow"
                 >
                   Cancel
                 </Button>
               </>
             )}
+
+            {/* ----- View‑only button ----- */}
             {isViewMode && (
-              <Button type="button" onClick={onClose} className="w-full">
+              <Button
+                type="button"
+                onClick={onClose}
+                className="w-full shadow-md hover:shadow-lg transition-shadow"
+              >
                 Close
               </Button>
             )}
           </div>
-        </form>
+        </footer>
       </Card>
     </div>
   );
