@@ -11,6 +11,7 @@ import { Plus } from "lucide-react";
 interface Indent {
   indentNo: string;
   plantName: string;
+  officeDispatcherName: string;
   partyName: string;
   vehicleNo: string;
   commodityType: string;
@@ -97,6 +98,7 @@ export default function IndentPage() {
                     {[
                       "Indent No",
                       "Plant Name",
+                      "Office Dispatcher",
                       "Party Name",
                       "Vehicle No",
                       "Commodity Type",
@@ -125,6 +127,9 @@ export default function IndentPage() {
                       </td>
                       <td className="px-6 py-4 text-sm text-slate-700">
                         {indent.plantName}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-slate-700">
+                        {indent.officeDispatcherName}
                       </td>
                       <td className="px-6 py-4 text-sm text-slate-700">
                         {indent.partyName}
@@ -180,6 +185,12 @@ export default function IndentPage() {
                         Plant Name:
                       </span>{" "}
                       <span className="text-slate-800">{indent.plantName}</span>
+                    </p>
+                    <p>
+                      <span className="font-medium text-slate-600">
+                        Office Dispatcher:
+                      </span>{" "}
+                      <span className="text-slate-800">{indent.officeDispatcherName}</span>
                     </p>
                     <p>
                       <span className="font-medium text-slate-600">
