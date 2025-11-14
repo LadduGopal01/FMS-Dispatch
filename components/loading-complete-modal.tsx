@@ -136,7 +136,10 @@ export default function LoadingCompleteModal({
                 <select
                   value={formData.unloadingMunsiName}
                   onChange={(e) =>
-                    setFormData({ ...formData, unloadingMunsiName: e.target.value })
+                    setFormData({
+                      ...formData,
+                      unloadingMunsiName: e.target.value,
+                    })
                   }
                   disabled={isViewMode}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
@@ -208,18 +211,89 @@ export default function LoadingCompleteModal({
               {/* ---------- Commodity ---------- */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Commodity</label>
-                <input
-                  type="text"
-                  placeholder="Enter commodity"
+                <select
                   value={formData.commodity}
                   onChange={(e) =>
                     setFormData({ ...formData, commodity: e.target.value })
                   }
                   disabled={isViewMode}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : ""
+                    isViewMode ? "bg-muted" : "bg-white"
                   }`}
-                />
+                >
+                  <option value="">Select Commodity</option>
+                  <option value="PADDY MOTA">PADDY MOTA</option>
+                  <option value="PADDY NEW">PADDY NEW</option>
+                  <option value="PADDY IR">PADDY IR</option>
+                  <option value="CMR (FRK BOILED)">CMR (FRK BOILED)</option>
+                  <option value="CMR (NON FRK BOILED)">
+                    CMR (NON FRK BOILED)
+                  </option>
+                  <option value="CMR (FRK RAW)">CMR (FRK RAW)</option>
+                  <option value="CMR (NON FRK RAW)">CMR (NON FRK RAW)</option>
+                  <option value="RICE (FRK BOILED)">RICE (FRK BOILED)</option>
+                  <option value="RICE (NON FRK BOILED)">
+                    RICE (NON FRK BOILED)
+                  </option>
+                  <option value="RICE (FRK RAW)">RICE (FRK RAW)</option>
+                  <option value="RICE (NON FRK RAW)">RICE (NON FRK RAW)</option>
+                  <option value="MURI RICE">MURI RICE</option>
+                  <option value="REJECTION (BOILED)">REJECTION (BOILED)</option>
+                  <option value="REJECTION (RAW)">REJECTION (RAW)</option>
+                  <option value="REJECTION (MURI)">REJECTION (MURI)</option>
+                  <option value="BROKEN (RAW SORTEX)">
+                    BROKEN (RAW SORTEX)
+                  </option>
+                  <option value="BROKEN (RAW NON SORTEX)">
+                    BROKEN (RAW NON SORTEX)
+                  </option>
+                  <option value="BROKEN (BOILED)">BROKEN (BOILED)</option>
+                  <option value="RICE BRAN (BOILED)">RICE BRAN (BOILED)</option>
+                  <option value="RICE BRAN (RAW)">RICE BRAN (RAW)</option>
+                  <option value="RICE BRAN (MURI)">RICE BRAN (MURI)</option>
+                  <option value="RICE BRAN (MURI SILKY)">
+                    RICE BRAN (MURI SILKY)
+                  </option>
+                  <option value="HUSK">HUSK</option>
+                  <option value="PELLETS (8 MM RICE HUSK)">
+                    PELLETS (8 MM RICE HUSK)
+                  </option>
+                  <option value="PELLETS (8 MM SAW DUST)">
+                    PELLETS (8 MM SAW DUST)
+                  </option>
+                  <option value="PELLETS (8 MM GROUNDNUT)">
+                    PELLETS (8 MM GROUNDNUT)
+                  </option>
+                  <option value="PELLETS (8 MM RICE HUSK & GROUNDNUT)">
+                    PELLETS (8 MM RICE HUSK & GROUNDNUT)
+                  </option>
+                  <option value="PELLETS (16 MM RICE HUSK)">
+                    PELLETS (16 MM RICE HUSK)
+                  </option>
+                  <option value="PELLETS (16 MM GROUNDNUT)">
+                    PELLETS (16 MM GROUNDNUT)
+                  </option>
+                  <option value="PELLETS (16 MM RICE HUSK & GROUNDNUT)">
+                    PELLETS (16 MM RICE HUSK & GROUNDNUT)
+                  </option>
+                  <option value="BRIQUETTE (90 MM RICE HUSK)">
+                    BRIQUETTE (90 MM RICE HUSK)
+                  </option>
+                  <option value="BRIQUETTE (90 MM GROUNDNUT)">
+                    BRIQUETTE (90 MM GROUNDNUT)
+                  </option>
+                  <option value="BRIQUETTE (90 MM SAWDUST)">
+                    BRIQUETTE (90 MM SAWDUST)
+                  </option>
+                  <option value="BRIQUETTE (90 MM RICE HUSK & GROUNDNUT)">
+                    BRIQUETTE (90 MM RICE HUSK & GROUNDNUT)
+                  </option>
+                  <option value="KAJU CHILKA">KAJU CHILKA</option>
+                  <option value="RAKHAD">RAKHAD</option>
+                  <option value="PLASTIC PKT">PLASTIC PKT</option>
+                  <option value="JUTE PKT">JUTE PKT</option>
+                  <option value="MOTA KUNDA">MOTA KUNDA</option>
+                </select>
               </div>
 
               {/* ---------- Quality ---------- */}
@@ -339,7 +413,6 @@ export default function LoadingCompleteModal({
                 }`}
               >
                 <option value="">Select status</option>
-                <option value="Loading">Loading</option>
                 <option value="Completed">Completed</option>
               </select>
             </div>

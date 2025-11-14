@@ -77,29 +77,42 @@ export default function IndentModal({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* === Plant Name === */}
               <div>
-                <label className="block text-sm font-medium mb-2">Plant Name</label>
+                <label className="block text-sm font-medium mb-2">
+                  Plant Name
+                </label>
                 <select
                   value={formData.plantName}
-                  onChange={(e) => setFormData({ ...formData, plantName: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, plantName: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-border rounded-lg shadow-sm focus:shadow-md focus:outline-none focus:ring-2 focus:ring-primary transition-all bg-white"
                 >
                   <option value="">Select Plant</option>
                   <option value="Shree Shyamji Paddy Processing Pvt Ltd">
                     Shree Shyamji Paddy Processing Pvt Ltd
                   </option>
-                  <option value="Laddu Gopal Industries">Laddu Gopal Industries</option>
-                  <option value="Radhe Govind Food Products">Radhe Govind Food Products</option>
+                  <option value="Laddu Gopal Industries">
+                    Laddu Gopal Industries
+                  </option>
+                  <option value="Radhe Govind Food Products">
+                    Radhe Govind Food Products
+                  </option>
                   <option value="Pellet Plant">Pellet Plant</option>
                 </select>
               </div>
 
               {/* === Office Dispatcher === */}
               <div>
-                <label className="block text-sm font-medium mb-2">Office Dispatcher Name</label>
+                <label className="block text-sm font-medium mb-2">
+                  Office Dispatcher Name
+                </label>
                 <select
                   value={formData.officeDispatcherName}
                   onChange={(e) =>
-                    setFormData({ ...formData, officeDispatcherName: e.target.value })
+                    setFormData({
+                      ...formData,
+                      officeDispatcherName: e.target.value,
+                    })
                   }
                   className="w-full px-4 py-2 border border-border rounded-lg shadow-sm focus:shadow-md focus:outline-none focus:ring-2 focus:ring-primary transition-all bg-white"
                 >
@@ -114,115 +127,106 @@ export default function IndentModal({
 
               {/* === Party Name === */}
               <div>
-                <label className="block text-sm font-medium mb-2">Party Name</label>
+                <label className="block text-sm font-medium mb-2">
+                  Party Name
+                </label>
                 <input
                   type="text"
                   placeholder="Enter party name"
                   value={formData.partyName}
-                  onChange={(e) => setFormData({ ...formData, partyName: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, partyName: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-border rounded-lg shadow-sm focus:shadow-md focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                 />
               </div>
 
               {/* === Vehicle No === */}
               <div>
-                <label className="block text-sm font-medium mb-2">Vehicle No</label>
+                <label className="block text-sm font-medium mb-2">
+                  Vehicle No
+                </label>
                 <input
                   type="text"
                   placeholder="Enter vehicle number"
                   value={formData.vehicleNo}
-                  onChange={(e) => setFormData({ ...formData, vehicleNo: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, vehicleNo: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-border rounded-lg shadow-sm focus:shadow-md focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                 />
               </div>
 
               {/* === Commodity Type === */}
               <div>
-                <label className="block text-sm font-medium mb-2">Commodity Type</label>
+                <label className="block text-sm font-medium mb-2">
+                  Commodity Type
+                </label>
                 <select
                   value={formData.commodityType}
-                  onChange={(e) => setFormData({ ...formData, commodityType: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, commodityType: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-border rounded-lg shadow-sm focus:shadow-md focus:outline-none focus:ring-2 focus:ring-primary transition-all bg-white"
                 >
                   <option value="">Select Commodity Type</option>
-                  <option value="PADDY MOTA">PADDY MOTA</option>
-                  <option value="PADDY NEW">PADDY NEW</option>
-                  <option value="PADDY IR">PADDY IR</option>
-                  <option value="CMR (FRK BOILED)">CMR (FRK BOILED)</option>
-                  <option value="CMR (NON FRK BOILED)">CMR (NON FRK BOILED)</option>
-                  <option value="CMR (FRK RAW)">CMR (FRK RAW)</option>
-                  <option value="CMR (NON FRK RAW)">CMR (NON FRK RAW)</option>
-                  <option value="RICE (FRK BOILED)">RICE (FRK BOILED)</option>
-                  <option value="RICE (NON FRK BOILED)">RICE (NON FRK BOILED)</option>
-                  <option value="RICE (FRK RAW)">RICE (FRK RAW)</option>
-                  <option value="RICE (NON FRK RAW)">RICE (NON FRK RAW)</option>
-                  <option value="MURI RICE">MURI RICE</option>
-                  <option value="REJECTION (BOILED)">REJECTION (BOILED)</option>
-                  <option value="REJECTION (RAW)">REJECTION (RAW)</option>
-                  <option value="REJECTION (MURI)">REJECTION (MURI)</option>
-                  <option value="BROKEN (RAW SORTEX)">BROKEN (RAW SORTEX)</option>
-                  <option value="BROKEN (RAW NON SORTEX)">BROKEN (RAW NON SORTEX)</option>
-                  <option value="BROKEN (BOILED)">BROKEN (BOILED)</option>
-                  <option value="RICE BRAN (BOILED)">RICE BRAN (BOILED)</option>
-                  <option value="RICE BRAN (RAW)">RICE BRAN (RAW)</option>
-                  <option value="RICE BRAN (MURI)">RICE BRAN (MURI)</option>
-                  <option value="HUSK">HUSK</option>
-                  <option value="PELLETS (8 MM RICE HUSK)">PELLETS (8 MM RICE HUSK)</option>
-                  <option value="PELLETS (8 MM SAW DUST)">PELLETS (8 MM SAW DUST)</option>
-                  <option value="PELLETS (8 MM GROUNDNUT)">PELLETS (8 MM GROUNDNUT)</option>
-                  <option value="PELLETS (16 MM RICE HUSK)">PELLETS (16 MM RICE HUSK)</option>
-                  <option value="PELLETS (8 MM RICE HUSK & GROUNDNUT)">
-                    PELLETS (8 MM RICE HUSK & GROUNDNUT)
-                  </option>
-                  <option value="PELLETS (16 MM GROUNDNUT)">PELLETS (16 MM GROUNDNUT)</option>
-                  <option value="PELLETS (16 MM RICE HUSK & GROUNDNUT)">
-                    PELLETS (16 MM RICE HUSK & GROUNDNUT)
-                  </option>
-                  <option value="BRIQUETTE (90 MM RICE HUSK)">BRIQUETTE (90 MM RICE HUSK)</option>
-                  <option value="BRIQUETTE (90 MM GROUNDNUT)">BRIQUETTE (90 MM GROUNDNUT)</option>
-                  <option value="BRIQUETTE (90 MM SAWDUST)">BRIQUETTE (90 MM SAWDUST)</option>
-                  <option value="BRIQUETTE (90 MM RICE HUSK & GROUNDNUT)">
-                    BRIQUETTE (90 MM RICE HUSK & GROUNDNUT)
-                  </option>
-                  <option value="KAJU CHILKA">KAJU CHILKA</option>
-                  <option value="RAKHAD">RAKHAD</option>
-                  <option value="PLASTIC PKT">PLASTIC PKT</option>
-                  <option value="JUTE PKT">JUTE PKT</option>
+                  <option value="Paddy">Paddy</option>
+                  <option value="Muri Rice">Muri Rice</option>
+                  <option value="Rice">Rice</option>
+                  <option value="Solvent Plant">Solvent Plant</option>
+                  <option value="Rejection">Rejection</option>
+                  <option value="Biomass">Biomass</option>
+                  <option value="CMR">CMR</option>
+                  <option value="Husk">Husk</option>
+                  <option value="Mota Kunda">Mota Kunda</option>
+                  <option value="Gunny">Gunny</option>
                 </select>
               </div>
 
               {/* === No. of PKTS === */}
               <div>
-                <label className="block text-sm font-medium mb-2">No. of PKTS</label>
+                <label className="block text-sm font-medium mb-2">
+                  No. of PKTS
+                </label>
                 <input
                   type="text"
                   placeholder="Enter number of packets"
                   value={formData.pkts}
-                  onChange={(e) => setFormData({ ...formData, pkts: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, pkts: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-border rounded-lg shadow-sm focus:shadow-md focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                 />
               </div>
 
               {/* === Bharti Size === */}
               <div>
-                <label className="block text-sm font-medium mb-2">Bharti Size</label>
+                <label className="block text-sm font-medium mb-2">
+                  Bharti Size
+                </label>
                 <input
                   type="text"
                   placeholder="Enter bharti size"
                   value={formData.bhartiSize}
-                  onChange={(e) => setFormData({ ...formData, bhartiSize: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, bhartiSize: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-border rounded-lg shadow-sm focus:shadow-md focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                 />
               </div>
 
               {/* === Total Quantity === */}
               <div>
-                <label className="block text-sm font-medium mb-2">Total Quantity</label>
+                <label className="block text-sm font-medium mb-2">
+                  Total Quantity
+                </label>
                 <input
                   type="text"
                   placeholder="Enter total quantity"
                   value={formData.totalQuantity}
-                  onChange={(e) => setFormData({ ...formData, totalQuantity: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, totalQuantity: e.target.value })
+                  }
                   className="w-full px-4 py-2 border border-border rounded-lg shadow-sm focus:shadow-md focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                 />
               </div>
@@ -234,7 +238,9 @@ export default function IndentModal({
               <textarea
                 placeholder="Enter remarks"
                 value={formData.remarks}
-                onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, remarks: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-border rounded-lg shadow-sm focus:shadow-md focus:outline-none focus:ring-2 focus:ring-primary transition-all resize-none"
                 rows={3}
               />
@@ -246,7 +252,7 @@ export default function IndentModal({
         <footer className="sticky bottom-0 z-20 border-t border-border bg-card p-4 shadow-lg">
           <div className="flex gap-3 pb-[max(env(safe-area-inset-bottom),1rem)]">
             <Button
-type="submit"
+              type="submit"
               form="indent-form"
               className="flex-1 shadow-md hover:shadow-lg transition-shadow"
             >

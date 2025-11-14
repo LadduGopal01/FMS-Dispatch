@@ -9,17 +9,29 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface GatePass {
+  id: string;
   indentNo: string;
   gatepassSerialNo: string;
   date: string;
   partyName: string;
   vehicleNo: string;
   driverName: string;
+  driverNumber: string;
+  billDetails: string;
+  transporterDetails: string;
   commodityType1: string;
   commodityType2: string;
   commodityType3: string;
   totalPkts: string;
+  totalQty: string;
   packetSize: string;
+  netWeight: string;
+  rate: string;
+  invoiceValue: string;
+  invoiceNumber: string;
+  lot: string;
+  unloadingWeight: string;
+  createdAt: number;
 }
 
 export default function GatePassPage() {
@@ -45,12 +57,47 @@ export default function GatePassPage() {
   }, [router]);
 
   const loadData = () => {
-    const lc = JSON.parse(localStorage.getItem("loadingComplete") || "[]");
-    const ind = JSON.parse(localStorage.getItem("indents") || "[]");
-    const gp = JSON.parse(localStorage.getItem("gatePass") || "[]");
-    setLoadingComplete(lc);
-    setIndents(ind);
-    setGatePasses(gp);
+    try {
+      const lc = JSON.parse(localStorage.getItem("loadingComplete") || "[]");
+      const ind = JSON.parse(localStorage.getItem("indents") || "[]");
+      const savedGatePasses = JSON.parse(localStorage.getItem("gatePass") || "[]");
+
+      const gp = savedGatePasses.map((pass: any) => ({
+        id: pass.id || `gp_${Date.now()}`,
+        indentNo: pass.indentNo || "",
+        gatepassSerialNo: pass.gatepassSerialNo || "",
+        date: pass.date || new Date().toISOString().split("T")[0],
+        partyName: pass.partyName || "",
+        vehicleNo: pass.vehicleNo || "",
+        driverName: pass.driverName || "",
+        driverNumber: pass.driverNumber || "",
+        billDetails: pass.billDetails || "",
+        transporterDetails: pass.transporterDetails || "",
+        commodityType1: pass.commodityType1 || "",
+        commodityType2: pass.commodityType2 || "",
+        commodityType3: pass.commodityType3 || "",
+        totalPkts: pass.totalPkts || "",
+        totalQty: pass.totalQty || "",
+        packetSize: pass.packetSize || "",
+        netWeight: pass.netWeight || "",
+        rate: pass.rate || "",
+        invoiceValue: pass.invoiceValue || "",
+        invoiceNumber: pass.invoiceNumber || "",
+        lot: pass.lot || "",
+        unloadingWeight: pass.unloadingWeight || "",
+        createdAt: pass.createdAt || Date.now(),
+      }));
+
+      setLoadingComplete(lc);
+      setIndents(ind);
+      setGatePasses(gp);
+      localStorage.setItem("gatePass", JSON.stringify(gp));
+    } catch (error) {
+      console.error("Error loading gate pass data:", error);
+      setLoadingComplete([]);
+      setIndents([]);
+      setGatePasses([]);
+    }
   };
 
   /* ------------------------------------------------------------------ */
@@ -63,17 +110,35 @@ export default function GatePassPage() {
   };
 
   const handleAddGatePass = (data: any) => {
-    const updated = [...gatePasses, data];
+    const timestamp = Date.now();
+    const gatePassWithId: GatePass = {
+      ...data,
+      id: `gp_${timestamp}`,
+      createdAt: timestamp,
+      driverNumber: data.driverNumber || "",
+      billDetails: data.billDetails || "",
+      transporterDetails: data.transporterDetails || "",
+      totalQty: data.totalQty || "",
+      netWeight: data.netWeight || "",
+      rate: data.rate || "",
+      invoiceValue: data.invoiceValue || "",
+      invoiceNumber: data.invoiceNumber || "",
+      lot: data.lot || "",
+      unloadingWeight: data.unloadingWeight || "",
+    };
+
+    const updated = [gatePassWithId, ...gatePasses];
     setGatePasses(updated);
     localStorage.setItem("gatePass", JSON.stringify(updated));
     setIsModalOpen(false);
+    setSelectedItem(null);
     loadData();
   };
 
   if (!isClient) return null;
 
   /* ------------------------------------------------------------------ */
-  /* Pending = loadingComplete that have NOT been issued a gate pass */
+  /* Pending items */
   /* ------------------------------------------------------------------ */
   const pendingItems = loadingComplete
     .filter((lc) => !gatePasses.find((gp) => gp.indentNo === lc.indentNo))
@@ -83,13 +148,15 @@ export default function GatePassPage() {
     });
 
   /* ------------------------------------------------------------------ */
-  /* History = gate passes + merged data */
+  /* History items – newest first */
   /* ------------------------------------------------------------------ */
-  const historyItems = gatePasses.map((gp) => {
-    const lc = loadingComplete.find((lc: any) => lc.indentNo === gp.indentNo);
-    const indent = indents.find((i: any) => i.indentNo === gp.indentNo);
-    return { ...gp, ...lc, ...indent };
-  });
+  const historyItems = [...gatePasses]
+    .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
+    .map((gp) => {
+      const lc = loadingComplete.find((lc: any) => lc.indentNo === gp.indentNo);
+      const indent = indents.find((i: any) => i.indentNo === gp.indentNo);
+      return { ...gp, ...lc, ...indent };
+    });
 
   /* ------------------------------------------------------------------ */
   /* Render */
@@ -100,7 +167,6 @@ export default function GatePassPage() {
 
       <main className="flex-1 overflow-y-auto">
         <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
-          {/* Header */}
           <div className="mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900">
               Gate Pass Management
@@ -125,119 +191,109 @@ export default function GatePassPage() {
                 History ({historyItems.length})
               </TabsTrigger>
             </TabsList>
-{/* ==================== PENDING ==================== */}
-<TabsContent value="pending" className="mt-0">
-  {pendingItems.length === 0 ? (
-    <Card className="p-8 text-center bg-white/80 backdrop-blur rounded-xl">
-      <p className="text-slate-500">No pending items for gate pass</p>
-    </Card>
-  ) : (
-    <>
-      {/* Desktop Table */}
-      <div className="hidden lg:block overflow-x-auto rounded-xl shadow-sm scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100">
-        <Card className="border-0 min-w-max">
-          <table className="w-full text-sm border-collapse">
-            <thead className="bg-slate-100 border-b border-slate-200">
-              <tr>
-                {[
-                  "Action",
-                  "Indent No",
-                  "Plant",
-                  "Party",
-                  "Vehicle",
-                  "Driver",
-                  "Munsi",
-                  "Commodity",
-                  "Quality",
-                  "PKTS",
-                  "Bharti Size",
-                  "Loaded Qty",
-                  "Remarks",
-                  "Packet Type",
-                  "Packet Name",
-                  "Status",
-                ].map((h) => (
-                  <th
-                    key={h}
-                    className="px-3 py-3 text-left text-xs font-semibold text-slate-700 uppercase whitespace-nowrap"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-slate-100">
-              {pendingItems.map((item) => (
-                <tr key={item.indentNo} className="hover:bg-slate-50 transition-colors">
-                  <td className="px-3 py-3">
-                    <Button
-                      size="sm"
-                      onClick={() => handleOpenModal(item)}
-                      className="h-8 px-3 text-xs bg-purple-600 hover:bg-purple-700"
-                    >
-                      Issue Pass
-                    </Button>
-                  </td>
-                  <td className="px-3 py-3 font-semibold text-blue-600 whitespace-nowrap">
-                    {item.indentNo}
-                  </td>
-                  <td className="px-3 py-3">{item.plantName || "-"}</td>
-                  <td className="px-3 py-3">{item.partyName || "-"}</td>
-                  <td className="px-3 py-3">{item.vehicleNo || "-"}</td>
-                  <td className="px-3 py-3">{item.driverName || "-"}</td>
-                  <td className="px-3 py-3">{item.unloadingMunsiName || "-"}</td>
-                  <td className="px-3 py-3">{item.commodity || "-"}</td>
-                  <td className="px-3 py-3">{item.quality || "-"}</td>
-                  <td className="px-3 py-3">{item.pkts || "-"}</td>
-                  <td className="px-3 py-3">{item.bhartiSize || "-"}</td>
-                  <td className="px-3 py-3">{item.quantity || "-"}</td>
-                  <td className="px-3 py-3">{item.remarks || "-"}</td>
-                  <td className="px-3 py-3">{item.packetType || "-"}</td>
-                  <td className="px-3 py-3">{item.packetName || "-"}</td>
-                  <td className="px-3 py-3 text-green-600 font-medium">
-                    {item.status2 || "Completed"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Card>
-      </div>
 
-      {/* Mobile Cards */}
-      <div className="lg:hidden space-y-4">
-        {pendingItems.map((item) => (
-          <Card
-            key={item.indentNo}
-            className="p-5 bg-white rounded-xl shadow-sm"
-          >
-            <h3 className="text-lg font-bold text-blue-600 mb-3">
-              {item.indentNo}
-            </h3>
-            <div className="grid grid-cols-2 gap-2 text-sm mb-4">
-              <p><span className="font-medium">Plant:</span> {item.plantName || "-"}</p>
-              <p><span className="font-medium">Party:</span> {item.partyName || "-"}</p>
-              <p><span className="font-medium">Vehicle:</span> {item.vehicleNo || "-"}</p>
-              <p><span className="font-medium">Driver:</span> {item.driverName || "-"}</p>
-              <p><span className="font-medium">Commodity:</span> {item.commodity || "-"}</p>
-              <p><span className="font-medium">Loaded:</span> {item.quantity || "-"}</p>
-              <p className="col-span-2">
-                <span className="font-medium">Status:</span>{" "}
-                <span className="text-green-600">{item.status2 || "Completed"}</span>
-              </p>
-            </div>
-            <Button
-              onClick={() => handleOpenModal(item)}
-              className="w-full h-10 bg-purple-600 hover:bg-purple-700"
-            >
-              Issue Gate Pass
-            </Button>
-          </Card>
-        ))}
-      </div>
-    </>
-  )}
-</TabsContent>
+            {/* ==================== PENDING ==================== */}
+            <TabsContent value="pending" className="mt-0">
+              {pendingItems.length === 0 ? (
+                <Card className="p-8 text-center bg-white/80 backdrop-blur rounded-xl">
+                  <p className="text-slate-500">No pending items for gate pass</p>
+                </Card>
+              ) : (
+                <>
+                  {/* Desktop Table */}
+                  <div className="hidden lg:block overflow-x-auto rounded-xl shadow-sm">
+                    <Card className="border-0 min-w-max">
+                      <table className="w-full text-sm border-collapse">
+                        <thead className="bg-slate-100 border-b border-slate-200">
+                          <tr>
+                            {[
+                              "Action",
+                              "Indent No",
+                              "Plant",
+                              "Party",
+                              "Vehicle",
+                              "Driver",
+                              "Munsi",
+                              "Commodity",
+                              "Quality",
+                              "PKTS",
+                              "Bharti Size",
+                              "Loaded Qty",
+                              "Remarks",
+                              "Packet Type",
+                              "Packet Name",
+                              "Status",
+                            ].map((h) => (
+                              <th
+                                key={h}
+                                className="px-3 py-3 text-left text-xs font-semibold text-slate-700 uppercase whitespace-nowrap"
+                              >
+                                {h}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-slate-100">
+                          {pendingItems.map((item) => (
+                            <tr key={item.indentNo} className="hover:bg-slate-50 transition-colors">
+                              <td className="px-3 py-3">
+                                <Button
+                                  size="sm"
+                                  onClick={() => handleOpenModal(item)}
+                                  className="h-8 px-3 text-xs bg-purple-600 hover:bg-purple-700"
+                                >
+                                  Issue Pass
+                                </Button>
+                              </td>
+                              <td className="px-3 py-3 font-semibold text-blue-600 whitespace-nowrap">
+                                {item.indentNo}
+                              </td>
+                              <td className="px-3 py-3">{item.plantName || "-"}</td>
+                              <td className="px-3 py-3">{item.partyName || "-"}</td>
+                              <td className="px-3 py-3">{item.vehicleNo || "-"}</td>
+                              <td className="px-3 py-3">{item.driverName || "-"}</td>
+                              <td className="px-3 py-3">{item.unloadingMunsiName || "-"}</td>
+                              <td className="px-3 py-3">{item.commodity || "-"}</td>
+                              <td className="px-3 py-3">{item.quality || "-"}</td>
+                              <td className="px-3 py-3">{item.pkts || "-"}</td>
+                              <td className="px-3 py-3">{item.bhartiSize || "-"}</td>
+                              <td className="px-3 py-3">{item.quantity || "-"}</td>
+                              <td className="px-3 py-3">{item.remarks || "-"}</td>
+                              <td className="px-3 py-3">{item.packetType || "-"}</td>
+                              <td className="px-3 py-3">{item.packetName || "-"}</td>
+                              <td className="px-3 py-3 text-green-600 font-medium">
+                                {item.status2 || "Completed"}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </Card>
+                  </div>
+
+                  {/* Mobile Cards */}
+                  <div className="lg:hidden space-y-4">
+                    {pendingItems.map((item) => (
+                      <Card key={item.indentNo} className="p-5 bg-white rounded-xl shadow-sm">
+                        <h3 className="text-lg font-bold text-blue-600 mb-3">{item.indentNo}</h3>
+                        <div className="grid grid-cols-2 gap-2 text-sm mb-4">
+                          <p><span className="font-medium">Plant:</span> {item.plantName || "-"}</p>
+                          <p><span className="font-medium">Party:</span> {item.partyName || "-"}</p>
+                          <p><span className="font-medium">Vehicle:</span> {item.vehicleNo || "-"}</p>
+                          <p><span className="font-medium">Driver:</span> {item.driverName || "-"}</p>
+                          <p><span className="font-medium">Commodity:</span> {item.commodity || "-"}</p>
+                          <p><span className="font-medium">Loaded:</span> {item.quantity || "-"}</p>
+                          <p className="col-span-2"><span className="font-medium">Status:</span> <span className="text-green-600">{item.status2 || "Completed"}</span></p>
+                        </div>
+                        <Button onClick={() => handleOpenModal(item)} className="w-full h-10 bg-purple-600 hover:bg-purple-700">
+                          Issue Gate Pass
+                        </Button>
+                      </Card>
+                    ))}
+                  </div>
+                </>
+              )}
+            </TabsContent>
 
             {/* ==================== HISTORY ==================== */}
             <TabsContent value="history" className="mt-0">
@@ -247,25 +303,34 @@ export default function GatePassPage() {
                 </Card>
               ) : (
                 <>
-                  {/* Desktop – full gate-pass headers */}
-                  <div className="hidden lg:block overflow-x-auto rounded-xl shadow-sm custom-scrollbar">
+                  {/* Desktop – full gate-pass table */}
+                  <div className="hidden lg:block overflow-x-auto rounded-xl shadow-sm">
                     <Card className="border-0">
                       <table className="w-full table-auto">
                         <thead className="bg-slate-100 border-b border-slate-200">
                           <tr>
                             {[
                               "Gate Pass No",
-                              "Indent No",
-                              "Plant",
                               "Date",
+                              "Indent No",
                               "Party",
                               "Vehicle",
                               "Driver",
-                              "Commodity Type 1",
-                              "Commodity Type 2",
-                              "Commodity Type 3",
+                              "Driver Number",
+                              "Bill Details",
+                              "Transporter",
+                              "Commodity 1",
+                              "Commodity 2",
+                              "Commodity 3",
                               "Total Pkts",
+                              "Total Qty",
                               "Packet Size",
+                              "Net Weight",
+                              "Rate",
+                              "Invoice Value",
+                              "Invoice No",
+                              "Lot",
+                              "Unloading Wt",
                             ].map((h) => (
                               <th
                                 key={h}
@@ -278,42 +343,28 @@ export default function GatePassPage() {
                         </thead>
                         <tbody className="bg-white divide-y divide-slate-100">
                           {historyItems.map((item) => (
-                            <tr
-                              key={item.gatepassSerialNo}
-                              className="hover:bg-slate-50"
-                            >
-                              <td className="px-3 py-3 text-sm font-bold text-purple-600">
-                                {item.gatepassSerialNo}
-                              </td>
-                              <td className="px-3 py-3 text-sm">
-                                {item.indentNo}
-                              </td>
-                              <td className="px-3 py-3 text-sm">{item.plantName || "-"}</td>
-                              <td className="px-3 py-3 text-sm">{item.date}</td>
-                              <td className="px-3 py-3 text-sm">
-                                {item.partyName}
-                              </td>
-                              <td className="px-3 py-3 text-sm">
-                                {item.vehicleNo}
-                              </td>
-                              <td className="px-3 py-3 text-sm">
-                                {item.driverName}
-                              </td>
-                              <td className="px-3 py-3 text-sm">
-                                {item.commodityType1 || "-"}
-                              </td>
-                              <td className="px-3 py-3 text-sm">
-                                {item.commodityType2 || "-"}
-                              </td>
-                              <td className="px-3 py-3 text-sm">
-                                {item.commodityType3 || "-"}
-                              </td>
-                              <td className="px-3 py-3 text-sm font-medium">
-                                {item.totalPkts}
-                              </td>
-                              <td className="px-3 py-3 text-sm">
-                                {item.packetSize}
-                              </td>
+                            <tr key={item.id} className="hover:bg-slate-50">
+                              {/* 1 */} <td className="px-3 py-3 font-medium text-purple-600">{item.gatepassSerialNo}</td>
+                              {/* 2 */} <td className="px-3 py-3">{item.date}</td>
+                              {/* 3 */} <td className="px-3 py-3">{item.indentNo}</td>
+                              {/* 4 */} <td className="px-3 py-3">{item.partyName || "-"}</td>
+                              {/* 5 */} <td className="px-3 py-3">{item.vehicleNo || "-"}</td>
+                              {/* 6 */} <td className="px-3 py-3">{item.driverName || "-"}</td>
+                              {/* 7 */} <td className="px-3 py-3">{item.driverNumber || "-"}</td>
+                              {/* 8 */} <td className="px-3 py-3">{item.billDetails || "-"}</td>
+                              {/* 9 */} <td className="px-3 py-3">{item.transporterDetails || "-"}</td>
+                              {/*10 */} <td className="px-3 py-3">{item.commodityType1 || "-"}</td>
+                              {/*11 */} <td className="px-3 py-3">{item.commodityType2 || "-"}</td>
+                              {/*12 */} <td className="px-3 py-3">{item.commodityType3 || "-"}</td>
+                              {/*13 */} <td className="px-3 py-3">{item.totalPkts || "-"}</td>
+                              {/*14 */} <td className="px-3 py-3">{item.totalQty || "-"}</td>
+                              {/*15 */} <td className="px-3 py-3">{item.packetSize || "-"}</td>
+                              {/*16 */} <td className="px-3 py-3">{item.netWeight || "-"}</td>
+                              {/*17 */} <td className="px-3 py-3">{item.rate || "-"}</td>
+                              {/*18 */} <td className="px-3 py-3">{item.invoiceValue || "-"}</td>
+                              {/*19 */} <td className="px-3 py-3">{item.invoiceNumber || "-"}</td>
+                              {/*20 */} <td className="px-3 py-3">{item.lot || "-"}</td>
+                              {/*21 */} <td className="px-3 py-3">{item.unloadingWeight || "-"}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -321,61 +372,44 @@ export default function GatePassPage() {
                     </Card>
                   </div>
 
-                  {/* Mobile cards – all fields */}
+                  {/* Mobile – full gate-pass cards */}
                   <div className="lg:hidden space-y-4">
                     {historyItems.map((item) => (
-                      <Card
-                        key={item.gatepassSerialNo}
-                        className="p-5 bg-white rounded-xl shadow-sm"
-                      >
+                      <Card key={item.id} className="p-5 bg-white rounded-xl shadow-sm">
                         <h3 className="text-lg font-bold text-purple-600 mb-3">
                           {item.gatepassSerialNo}
                         </h3>
+
                         <div className="grid grid-cols-2 gap-2 text-sm mb-4">
-                          <p>
-                            <span className="font-medium">Indent:</span>{" "}
-                            {item.indentNo}
-                          </p>
-                          <p>
-                            <span className="font-medium">Plant:</span>{" "}
-                            {item.plantName || "-"}
-                          </p>
-                          <p>
-                            <span className="font-medium">Date:</span>{" "}
-                            {item.date}
-                          </p>
-                          <p>
-                            <span className="font-medium">Party:</span>{" "}
-                            {item.partyName}
-                          </p>
-                          <p>
-                            <span className="font-medium">Vehicle:</span>{" "}
-                            {item.vehicleNo}
-                          </p>
-                          <p>
-                            <span className="font-medium">Driver:</span>{" "}
-                            {item.driverName}
-                          </p>
-                          <p>
-                            <span className="font-medium">Type 1:</span>{" "}
-                            {item.commodityType1 || "-"}
-                          </p>
-                          <p>
-                            <span className="font-medium">Type 2:</span>{" "}
-                            {item.commodityType2 || "-"}
-                          </p>
-                          <p>
-                            <span className="font-medium">Type 3:</span>{" "}
-                            {item.commodityType3 || "-"}
-                          </p>
-                          <p>
-                            <span className="font-medium">Pkts:</span>{" "}
-                            <strong>{item.totalPkts}</strong>
-                          </p>
-                          <p>
-                            <span className="font-medium">Size:</span>{" "}
-                            {item.packetSize}
-                          </p>
+                          <p><span className="font-medium">Date:</span> {item.date}</p>
+                          <p><span className="font-medium">Indent:</span> {item.indentNo}</p>
+
+                          <p><span className="font-medium">Party:</span> {item.partyName || "-"}</p>
+                          <p><span className="font-medium">Vehicle:</span> {item.vehicleNo || "-"}</p>
+
+                          <p><span className="font-medium">Driver:</span> {item.driverName || "-"}</p>
+                          <p><span className="font-medium">Driver No:</span> {item.driverNumber || "-"}</p>
+
+                          <p><span className="font-medium">Bill:</span> {item.billDetails || "-"}</p>
+                          <p><span className="font-medium">Transporter:</span> {item.transporterDetails || "-"}</p>
+
+                          <p><span className="font-medium">C1:</span> {item.commodityType1 || "-"}</p>
+                          <p><span className="font-medium">C2:</span> {item.commodityType2 || "-"}</p>
+
+                          <p><span className="font-medium">C3:</span> {item.commodityType3 || "-"}</p>
+                          <p><span className="font-medium">Pkts:</span> <strong>{item.totalPkts || "-"}</strong></p>
+
+                          <p><span className="font-medium">Qty:</span> {item.totalQty || "-"}</p>
+                          <p><span className="font-medium">Size:</span> {item.packetSize || "-"}</p>
+
+                          <p><span className="font-medium">Net Wt:</span> {item.netWeight || "-"}</p>
+                          <p><span className="font-medium">Rate:</span> {item.rate || "-"}</p>
+
+                          <p><span className="font-medium">Inv Val:</span> {item.invoiceValue || "-"}</p>
+                          <p><span className="font-medium">Inv No:</span> {item.invoiceNumber || "-"}</p>
+
+                          <p><span className="font-medium">Lot:</span> {item.lot || "-"}</p>
+                          <p><span className="font-medium">Unload Wt:</span> {item.unloadingWeight || "-"}</p>
                         </div>
                       </Card>
                     ))}
@@ -387,7 +421,7 @@ export default function GatePassPage() {
         </div>
       </main>
 
-      {/* Modal – only for issuing a new gate pass */}
+      {/* Modal */}
       <GatePassModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
