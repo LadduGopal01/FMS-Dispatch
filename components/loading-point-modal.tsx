@@ -22,7 +22,7 @@ export default function LoadingPointModal({
 }: LoadingPointModalProps) {
   const [formData, setFormData] = useState({
     vehicleReached: "No",
-    status1: "",
+    status1: "Complete", // Default to Complete
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -79,21 +79,24 @@ export default function LoadingPointModal({
               className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option>Yes</option>
-              <option>No</option>
+          
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-2">Status</label>
-            <input
-              type="text"
-              placeholder="Enter status"
+            <select
               value={formData.status1}
               onChange={(e) =>
                 setFormData({ ...formData, status1: e.target.value })
               }
               className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            />
+              required
+            >
+              <option value="">Select status</option>
+              <option value="Complete">Complete</option>
+            
+            </select>
           </div>
 
           <div className="flex gap-3 pt-4">

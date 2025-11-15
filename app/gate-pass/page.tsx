@@ -20,8 +20,11 @@ interface GatePass {
   billDetails: string;
   transporterDetails: string;
   commodityType1: string;
+  commoditySubType1: string;   // NEW
   commodityType2: string;
+  commoditySubType2: string;   // NEW
   commodityType3: string;
+  commoditySubType3: string;   // NEW
   totalPkts: string;
   totalQty: string;
   packetSize: string;
@@ -74,8 +77,11 @@ export default function GatePassPage() {
         billDetails: pass.billDetails || "",
         transporterDetails: pass.transporterDetails || "",
         commodityType1: pass.commodityType1 || "",
+        commoditySubType1: pass.commoditySubType1 || "",   // NEW
         commodityType2: pass.commodityType2 || "",
+        commoditySubType2: pass.commoditySubType2 || "",   // NEW
         commodityType3: pass.commodityType3 || "",
+        commoditySubType3: pass.commoditySubType3 || "",   // NEW
         totalPkts: pass.totalPkts || "",
         totalQty: pass.totalQty || "",
         packetSize: pass.packetSize || "",
@@ -118,6 +124,9 @@ export default function GatePassPage() {
       driverNumber: data.driverNumber || "",
       billDetails: data.billDetails || "",
       transporterDetails: data.transporterDetails || "",
+      commoditySubType1: data.commoditySubType1 || "",   // NEW
+      commoditySubType2: data.commoditySubType2 || "",   // NEW
+      commoditySubType3: data.commoditySubType3 || "",   // NEW
       totalQty: data.totalQty || "",
       netWeight: data.netWeight || "",
       rate: data.rate || "",
@@ -162,7 +171,7 @@ export default function GatePassPage() {
   /* Render */
   /* ------------------------------------------------------------------ */
   return (
-    <div className="flex h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="flex h/screen bg-gradient-to-br from-slate-50 to-slate-100">
       <Sidebar />
 
       <main className="flex-1 overflow-y-auto">
@@ -320,8 +329,11 @@ export default function GatePassPage() {
                               "Bill Details",
                               "Transporter",
                               "Commodity 1",
+                              "C1 Sub",          // NEW
                               "Commodity 2",
+                              "C2 Sub",          // NEW
                               "Commodity 3",
+                              "C3 Sub",          // NEW
                               "Total Pkts",
                               "Total Qty",
                               "Packet Size",
@@ -344,27 +356,37 @@ export default function GatePassPage() {
                         <tbody className="bg-white divide-y divide-slate-100">
                           {historyItems.map((item) => (
                             <tr key={item.id} className="hover:bg-slate-50">
-                              {/* 1 */} <td className="px-3 py-3 font-medium text-purple-600">{item.gatepassSerialNo}</td>
-                              {/* 2 */} <td className="px-3 py-3">{item.date}</td>
-                              {/* 3 */} <td className="px-3 py-3">{item.indentNo}</td>
-                              {/* 4 */} <td className="px-3 py-3">{item.partyName || "-"}</td>
-                              {/* 5 */} <td className="px-3 py-3">{item.vehicleNo || "-"}</td>
-                              {/* 6 */} <td className="px-3 py-3">{item.driverName || "-"}</td>
-                              {/* 7 */} <td className="px-3 py-3">{item.driverNumber || "-"}</td>
-                              {/* 8 */} <td className="px-3 py-3">{item.billDetails || "-"}</td>
-                              {/* 9 */} <td className="px-3 py-3">{item.transporterDetails || "-"}</td>
-                              {/*10 */} <td className="px-3 py-3">{item.commodityType1 || "-"}</td>
-                              {/*11 */} <td className="px-3 py-3">{item.commodityType2 || "-"}</td>
-                              {/*12 */} <td className="px-3 py-3">{item.commodityType3 || "-"}</td>
-                              {/*13 */} <td className="px-3 py-3">{item.totalPkts || "-"}</td>
-                              {/*14 */} <td className="px-3 py-3">{item.totalQty || "-"}</td>
-                              {/*15 */} <td className="px-3 py-3">{item.packetSize || "-"}</td>
-                              {/*16 */} <td className="px-3 py-3">{item.netWeight || "-"}</td>
-                              {/*17 */} <td className="px-3 py-3">{item.rate || "-"}</td>
-                              {/*18 */} <td className="px-3 py-3">{item.invoiceValue || "-"}</td>
-                              {/*19 */} <td className="px-3 py-3">{item.invoiceNumber || "-"}</td>
-                              {/*20 */} <td className="px-3 py-3">{item.lot || "-"}</td>
-                              {/*21 */} <td className="px-3 py-3">{item.unloadingWeight || "-"}</td>
+                              <td className="px-3 py-3 font-medium text-purple-600">{item.gatepassSerialNo}</td>
+                              <td className="px-3 py-3">{item.date}</td>
+                              <td className="px-3 py-3">{item.indentNo}</td>
+                              <td className="px-3 py-3">{item.partyName || "-"}</td>
+                              <td className="px-3 py-3">{item.vehicleNo || "-"}</td>
+                              <td className="px-3 py-3">{item.driverName || "-"}</td>
+                              <td className="px-3 py-3">{item.driverNumber || "-"}</td>
+                              <td className="px-3 py-3">{item.billDetails || "-"}</td>
+                              <td className="px-3 py-3">{item.transporterDetails || "-"}</td>
+
+                              {/* Commodity 1 */}
+                              <td className="px-3 py-3">{item.commodityType1 || "-"}</td>
+                              <td className="px-3 py-3">{item.commoditySubType1 || "-"}</td>
+
+                              {/* Commodity 2 */}
+                              <td className="px-3 py-3">{item.commodityType2 || "-"}</td>
+                              <td className="px-3 py-3">{item.commoditySubType2 || "-"}</td>
+
+                              {/* Commodity 3 */}
+                              <td className="px-3 py-3">{item.commodityType3 || "-"}</td>
+                              <td className="px-3 py-3">{item.commoditySubType3 || "-"}</td>
+
+                              <td className="px-3 py-3">{item.totalPkts || "-"}</td>
+                              <td className="px-3 py-3">{item.totalQty || "-"}</td>
+                              <td className="px-3 py-3">{item.packetSize || "-"}</td>
+                              <td className="px-3 py-3">{item.netWeight || "-"}</td>
+                              <td className="px-3 py-3">{item.rate || "-"}</td>
+                              <td className="px-3 py-3">{item.invoiceValue || "-"}</td>
+                              <td className="px-3 py-3">{item.invoiceNumber || "-"}</td>
+                              <td className="px-3 py-3">{item.lot || "-"}</td>
+                              <td className="px-3 py-3">{item.unloadingWeight || "-"}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -393,22 +415,28 @@ export default function GatePassPage() {
                           <p><span className="font-medium">Bill:</span> {item.billDetails || "-"}</p>
                           <p><span className="font-medium">Transporter:</span> {item.transporterDetails || "-"}</p>
 
+                          {/* Sub-types */}
                           <p><span className="font-medium">C1:</span> {item.commodityType1 || "-"}</p>
+                          <p><span className="font-medium">C1 Sub:</span> {item.commoditySubType1 || "-"}</p>
+
                           <p><span className="font-medium">C2:</span> {item.commodityType2 || "-"}</p>
+                          <p><span className="font-medium">C2 Sub:</span> {item.commoditySubType2 || "-"}</p>
 
                           <p><span className="font-medium">C3:</span> {item.commodityType3 || "-"}</p>
+                          <p><span className="font-medium">C3 Sub:</span> {item.commoditySubType3 || "-"}</p>
+
                           <p><span className="font-medium">Pkts:</span> <strong>{item.totalPkts || "-"}</strong></p>
-
                           <p><span className="font-medium">Qty:</span> {item.totalQty || "-"}</p>
+
                           <p><span className="font-medium">Size:</span> {item.packetSize || "-"}</p>
-
                           <p><span className="font-medium">Net Wt:</span> {item.netWeight || "-"}</p>
+
                           <p><span className="font-medium">Rate:</span> {item.rate || "-"}</p>
-
                           <p><span className="font-medium">Inv Val:</span> {item.invoiceValue || "-"}</p>
-                          <p><span className="font-medium">Inv No:</span> {item.invoiceNumber || "-"}</p>
 
+                          <p><span className="font-medium">Inv No:</span> {item.invoiceNumber || "-"}</p>
                           <p><span className="font-medium">Lot:</span> {item.lot || "-"}</p>
+
                           <p><span className="font-medium">Unload Wt:</span> {item.unloadingWeight || "-"}</p>
                         </div>
                       </Card>

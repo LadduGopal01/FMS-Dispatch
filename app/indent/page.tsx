@@ -6,7 +6,8 @@ import Sidebar from "@/components/sidebar";
 import IndentModal from "@/components/indent-modal";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Eye } from "lucide-react";
+import IndentDetailsModal from "@/components/indent-details-modal";
 
 interface Indent {
   indentNo: string;
@@ -26,6 +27,7 @@ export default function IndentPage() {
   const [isClient, setIsClient] = useState(false);
   const [indents, setIndents] = useState<Indent[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedIndent, setSelectedIndent] = useState<Indent | null>(null);
   const [nextIndentNo, setNextIndentNo] = useState(1);
 
   useEffect(() => {
@@ -172,14 +174,18 @@ export default function IndentPage() {
               indents.map((indent) => (
                 <Card
                   key={indent.indentNo}
-                  className="p-5 bg-white shadow-sm border-0 rounded-xl hover:shadow-md transition-shadow"
+                  onClick={() => setSelectedIndent(indent)}
+                  className="p-5 bg-white shadow-sm border-0 rounded-xl hover:shadow-md transition-shadow cursor-pointer"
                 >
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="text-lg font-bold text-blue-600">
                       {indent.indentNo}
                     </h3>
                   </div>
-                  <div className="space-y-2 text-sm">
+                  <div
+                    className="space-y-2 text-sm"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <p>
                       <span className="font-medium text-slate-600">
                         Plant Name:
@@ -190,7 +196,9 @@ export default function IndentPage() {
                       <span className="font-medium text-slate-600">
                         Office Dispatcher:
                       </span>{" "}
-                      <span className="text-slate-800">{indent.officeDispatcherName}</span>
+                      <span className="text-slate-800">
+                        {indent.officeDispatcherName}
+                      </span>
                     </p>
                     <p>
                       <span className="font-medium text-slate-600">
@@ -240,10 +248,18 @@ export default function IndentPage() {
                       </span>{" "}
                       <span className="text-slate-800">{indent.remarks}</span>
                     </p>
+                    <div className="pt-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSelectedIndent(indent)}
+                        className="w-full flex items-center justify-center gap-1"
+                      >
+                        <Eye className="w-4 h-4" />
+                        View Details
+                      </Button>
+                    </div>
                   </div>
-                  <Button size="sm" className="mt-4 w-full" variant="outline">
-                    View Details
-                  </Button>
                 </Card>
               ))
             )}
@@ -251,11 +267,16 @@ export default function IndentPage() {
         </div>
       </main>
 
-      {/* Modal */}
       <IndentModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleAddIndent}
+      />
+
+      <IndentDetailsModal
+        isOpen={!!selectedIndent}
+        onClose={() => setSelectedIndent(null)}
+        indent={selectedIndent}
       />
     </div>
   );

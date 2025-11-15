@@ -99,237 +99,256 @@ export default function LoadingPointPage() {
               </TabsTrigger>
             </TabsList>
 
-          {/* === PENDING TAB === */}
-<TabsContent value="pending" className="mt-2">
-  {pendingIndents.length === 0 ? (
-    <Card className="p-10 text-center bg-white shadow-sm rounded-2xl">
-      <p className="text-slate-500 text-base">No pending indents found</p>
-    </Card>
-  ) : (
-    <>
-      {/* Desktop View */}
-      <div className="hidden lg:block overflow-x-auto rounded-2xl border border-slate-200 shadow-sm bg-white">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50 border-b border-slate-200">
-            <tr>
-              {[
-                "Action",
-                "Indent No",
-                "Plant Name",
-                "Office Dispatcher",
-                "Party Name",
-                "Vehicle No",
-                "Commodity Type",
-                "No. of Pkts",
-                "Bharti Size",
-                "Total Quantity",
-                "Remarks",
-              ].map((h) => (
-                <th
-                  key={h}
-                  className="px-5 py-3 text-left font-semibold text-slate-600 uppercase text-xs tracking-wide"
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {pendingIndents.map((indent) => (
-              <tr
-                key={indent.indentNo}
-                className="hover:bg-slate-50 transition-colors"
-              >
-                <td className="px-5 py-3">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="text-xs"
-                    onClick={() => handleOpenModal(indent.indentNo)}
-                  >
-                    Process
-                  </Button>
-                </td>
-                <td className="px-5 py-3 text-blue-600 font-semibold">
-                  {indent.indentNo}
-                </td>
-                <td className="px-5 py-3 text-slate-700">{indent.plantName}</td>
-                <td className="px-5 py-3 text-slate-700">
-                  {indent.officeDispatcherName}
-                </td>
-                <td className="px-5 py-3 text-slate-700">
-                  {indent.partyName}
-                </td>
-                <td className="px-5 py-3 text-slate-700">
-                  {indent.vehicleNo}
-                </td>
-                <td className="px-5 py-3 text-slate-700">
-                  {indent.commodityType}
-                </td>
-                <td className="px-5 py-3 text-slate-700">{indent.pkts}</td>
-                <td className="px-5 py-3 text-slate-700">
-                  {indent.bhartiSize}
-                </td>
-                <td className="px-5 py-3 text-slate-700">
-                  {indent.totalQuantity}
-                </td>
-                <td className="px-5 py-3 text-slate-700">{indent.remarks}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            {/* === PENDING TAB === */}
+            <TabsContent value="pending" className="mt-2">
+              {pendingIndents.length === 0 ? (
+                <Card className="p-10 text-center bg-white shadow-sm rounded-2xl">
+                  <p className="text-slate-500 text-base">
+                    No pending indents found
+                  </p>
+                </Card>
+              ) : (
+                <>
+                  {/* Desktop View */}
+                  <div className="hidden lg:block overflow-x-auto rounded-2xl border border-slate-200 shadow-sm bg-white">
+                    <table className="w-full text-sm">
+                      <thead className="bg-slate-50 border-b border-slate-200">
+                        <tr>
+                          {[
+                            "Action",
+                            "Indent No",
+                            "Plant Name",
+                            "Office Dispatcher",
+                            "Party Name",
+                            "Vehicle No",
+                            "Commodity Type",
+                            "No. of Pkts",
+                            "Bharti Size",
+                            "Total Quantity",
+                            "Remarks",
+                          ].map((h) => (
+                            <th
+                              key={h}
+                              className="px-5 py-3 text-left font-semibold text-slate-600 uppercase text-xs tracking-wide"
+                            >
+                              {h}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {pendingIndents.map((indent) => (
+                          <tr
+                            key={indent.indentNo}
+                            className="hover:bg-slate-50 transition-colors"
+                          >
+                            <td className="px-5 py-3">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-xs"
+                                onClick={() => handleOpenModal(indent.indentNo)}
+                              >
+                                Process
+                              </Button>
+                            </td>
+                            <td className="px-5 py-3 text-blue-600 font-semibold">
+                              {indent.indentNo}
+                            </td>
+                            <td className="px-5 py-3 text-slate-700">
+                              {indent.plantName}
+                            </td>
+                            <td className="px-5 py-3 text-slate-700">
+                              {indent.officeDispatcherName}
+                            </td>
+                            <td className="px-5 py-3 text-slate-700">
+                              {indent.partyName}
+                            </td>
+                            <td className="px-5 py-3 text-slate-700">
+                              {indent.vehicleNo}
+                            </td>
+                            <td className="px-5 py-3 text-slate-700">
+                              {indent.commodityType}
+                            </td>
+                            <td className="px-5 py-3 text-slate-700">
+                              {indent.pkts}
+                            </td>
+                            <td className="px-5 py-3 text-slate-700">
+                              {indent.bhartiSize}
+                            </td>
+                            <td className="px-5 py-3 text-slate-700">
+                              {indent.totalQuantity}
+                            </td>
+                            <td className="px-5 py-3 text-slate-700">
+                              {indent.remarks}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
 
-      {/* Mobile Cards */}
-      <div className="lg:hidden space-y-4">
-        {pendingIndents.map((indent) => (
-          <Card
-            key={indent.indentNo}
-            className="p-5 rounded-2xl shadow-sm border border-slate-200 bg-white"
-          >
-            <div className="flex justify-between mb-2">
-              <h3 className="font-semibold text-blue-600 text-lg">
-                {indent.indentNo}
-              </h3>
-              <Button
-                size="sm"
-                onClick={() => handleOpenModal(indent.indentNo)}
-              >
-                Process
-              </Button>
-            </div>
-            <div className="text-sm text-slate-700 space-y-1">
-              <p>Plant: {indent.plantName}</p>
-              <p>Dispatcher: {indent.officeDispatcherName}</p>
-              <p>Party: {indent.partyName}</p>
-              <p>Vehicle: {indent.vehicleNo}</p>
-              <p>Commodity: {indent.commodityType}</p>
-              <p>Pkts: {indent.pkts}</p>
-              <p>Bharti Size: {indent.bhartiSize}</p>
-              <p>Quantity: {indent.totalQuantity}</p>
-              <p>Remarks: {indent.remarks}</p>
-            </div>
-          </Card>
-        ))}
-      </div>
-    </>
-  )}
-</TabsContent>
+                  {/* Mobile Cards */}
+                  <div className="lg:hidden space-y-4">
+                    {pendingIndents.map((indent) => (
+                      <Card
+                        key={indent.indentNo}
+                        className="p-5 rounded-2xl shadow-sm border border-slate-200 bg-white"
+                      >
+                        <div className="flex justify-between mb-2">
+                          <h3 className="font-semibold text-blue-600 text-lg">
+                            {indent.indentNo}
+                          </h3>
+                          <Button
+                            size="sm"
+                            onClick={() => handleOpenModal(indent.indentNo)}
+                          >
+                            Process
+                          </Button>
+                        </div>
+                        <div className="text-sm text-slate-700 space-y-1">
+                          <p>Plant: {indent.plantName}</p>
+                          <p>Dispatcher: {indent.officeDispatcherName}</p>
+                          <p>Party: {indent.partyName}</p>
+                          <p>Vehicle: {indent.vehicleNo}</p>
+                          <p>Commodity: {indent.commodityType}</p>
+                          <p>Pkts: {indent.pkts}</p>
+                          <p>Bharti Size: {indent.bhartiSize}</p>
+                          <p>Quantity: {indent.totalQuantity}</p>
+                          <p>Remarks: {indent.remarks}</p>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </>
+              )}
+            </TabsContent>
 
+            {/* === HISTORY TAB === */}
+            <TabsContent value="history" className="mt-2">
+              {historyItems.length === 0 ? (
+                <Card className="p-10 text-center bg-white shadow-sm rounded-2xl">
+                  <p className="text-slate-500 text-base">
+                    No history records found
+                  </p>
+                </Card>
+              ) : (
+                <>
+                  <div className="hidden lg:block overflow-x-auto rounded-2xl border border-slate-200 shadow-sm bg-white">
+                    <table className="w-full text-sm">
+                      <thead className="bg-slate-50 border-b border-slate-200">
+                        <tr>
+                          {[
+                            "Action",
+                            "Indent No",
+                            "Plant Name",
+                            "Office Dispatcher",
+                            "Party Name",
+                            "Vehicle No",
+                            "Commodity Type",
+                            "No. of Pkts",
+                            "Bharti Size",
+                            "Total Quantity",
+                            "Remarks",
+                            "Vehicle Reached",
+                            "Status",
+                          ].map((h) => (
+                            <th
+                              key={h}
+                              className="px-5 py-3 text-left font-semibold text-slate-600 uppercase text-xs tracking-wide"
+                            >
+                              {h}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {historyItems.map((item) => {
+                          const indent = indents.find(
+                            (i) => i.indentNo === item.indentNo
+                          );
+                          if (!indent) return null;
+                          return (
+                            <tr
+                              key={item.indentNo}
+                              className="hover:bg-slate-50 transition-colors"
+                            >
+                              <td className="px-5 py-3">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="text-xs"
+                                  onClick={() => handleOpenModal(item.indentNo)}
+                                >
+                                  View
+                                </Button>
+                              </td>
+                              <td className="px-5 py-3 font-semibold text-blue-600">
+                                {item.indentNo}
+                              </td>
+                              <td className="px-5 py-3">{indent.plantName}</td>
+                              <td className="px-5 py-3">
+                                {indent.officeDispatcherName}
+                              </td>
+                              <td className="px-5 py-3">{indent.partyName}</td>
+                              <td className="px-5 py-3">{indent.vehicleNo}</td>
+                              <td className="px-5 py-3">
+                                {indent.commodityType}
+                              </td>
+                              <td className="px-5 py-3">{indent.pkts}</td>
+                              <td className="px-5 py-3">{indent.bhartiSize}</td>
+                              <td className="px-5 py-3">
+                                {indent.totalQuantity}
+                              </td>
+                              <td className="px-5 py-3">{indent.remarks}</td>
+                              <td className="px-5 py-3">
+                                {item.vehicleReached}
+                              </td>
+                              <td className="px-5 py-3 font-medium text-green-600">
+                                {item.status1}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
 
-{/* === HISTORY TAB === */}
-<TabsContent value="history" className="mt-2">
-  {historyItems.length === 0 ? (
-    <Card className="p-10 text-center bg-white shadow-sm rounded-2xl">
-      <p className="text-slate-500 text-base">No history records found</p>
-    </Card>
-  ) : (
-    <>
-      <div className="hidden lg:block overflow-x-auto rounded-2xl border border-slate-200 shadow-sm bg-white">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50 border-b border-slate-200">
-            <tr>
-              {[
-                "Action",
-                "Indent No",
-                "Plant Name",
-                "Office Dispatcher",
-                "Party Name",
-                "Vehicle No",
-                "Commodity Type",
-                "No. of Pkts",
-                "Bharti Size",
-                "Total Quantity",
-                "Remarks",
-                "Vehicle Reached",
-                "Status",
-              ].map((h) => (
-                <th
-                  key={h}
-                  className="px-5 py-3 text-left font-semibold text-slate-600 uppercase text-xs tracking-wide"
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {historyItems.map((item) => {
-              const indent = indents.find(
-                (i) => i.indentNo === item.indentNo
-              );
-              if (!indent) return null;
-              return (
-                <tr
-                  key={item.indentNo}
-                  className="hover:bg-slate-50 transition-colors"
-                >
-                  <td className="px-5 py-3">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="text-xs"
-                      onClick={() => handleOpenModal(item.indentNo)}
-                    >
-                      View
-                    </Button>
-                  </td>
-                  <td className="px-5 py-3 font-semibold text-blue-600">
-                    {item.indentNo}
-                  </td>
-                  <td className="px-5 py-3">{indent.plantName}</td>
-                  <td className="px-5 py-3">{indent.officeDispatcherName}</td>
-                  <td className="px-5 py-3">{indent.partyName}</td>
-                  <td className="px-5 py-3">{indent.vehicleNo}</td>
-                  <td className="px-5 py-3">{indent.commodityType}</td>
-                  <td className="px-5 py-3">{indent.pkts}</td>
-                  <td className="px-5 py-3">{indent.bhartiSize}</td>
-                  <td className="px-5 py-3">{indent.totalQuantity}</td>
-                  <td className="px-5 py-3">{indent.remarks}</td>
-                  <td className="px-5 py-3">{item.vehicleReached}</td>
-                  <td className="px-5 py-3 font-medium text-green-600">
-                    {item.status1}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Mobile Cards */}
-      <div className="lg:hidden space-y-4">
-        {historyItems.map((item) => {
-          const indent = indents.find((i) => i.indentNo === item.indentNo);
-          return (
-            <Card
-              key={item.indentNo}
-              className="p-5 rounded-2xl shadow-sm border border-slate-200 bg-white"
-            >
-              <h3 className="font-semibold text-blue-600 text-lg mb-2">
-                {item.indentNo}
-              </h3>
-              <div className="text-sm text-slate-700 space-y-1">
-                <p>Plant: {indent?.plantName}</p>
-                <p>Party: {indent?.partyName}</p>
-                <p>Vehicle: {indent?.vehicleNo}</p>
-                <p>Commodity: {indent?.commodityType}</p>
-                <p>Pkts: {indent?.pkts}</p>
-                <p>Bharti Size: {indent?.bhartiSize}</p>
-                <p>Quantity: {indent?.totalQuantity}</p>
-                <p>Remarks: {indent?.remarks}</p>
-                <p>Vehicle Reached: {item.vehicleReached}</p>
-                <p className="text-green-600 font-medium">
-                  Status: {item.status1}
-                </p>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
-    </>
-  )}
-</TabsContent>
+                  {/* Mobile Cards */}
+                  <div className="lg:hidden space-y-4">
+                    {historyItems.map((item) => {
+                      const indent = indents.find(
+                        (i) => i.indentNo === item.indentNo
+                      );
+                      return (
+                        <Card
+                          key={item.indentNo}
+                          className="p-5 rounded-2xl shadow-sm border border-slate-200 bg-white"
+                        >
+                          <h3 className="font-semibold text-blue-600 text-lg mb-2">
+                            {item.indentNo}
+                          </h3>
+                          <div className="text-sm text-slate-700 space-y-1">
+                            <p>Plant: {indent?.plantName}</p>
+                            <p>Party: {indent?.partyName}</p>
+                            <p>Vehicle: {indent?.vehicleNo}</p>
+                            <p>Commodity: {indent?.commodityType}</p>
+                            <p>Pkts: {indent?.pkts}</p>
+                            <p>Bharti Size: {indent?.bhartiSize}</p>
+                            <p>Quantity: {indent?.totalQuantity}</p>
+                            <p>Remarks: {indent?.remarks}</p>
+                            <p>Vehicle Reached: {item.vehicleReached}</p>
+                            <p className="text-green-600 font-medium">
+                              Status: {item.status1}
+                            </p>
+                          </div>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </TabsContent>
           </Tabs>
         </div>
       </main>
