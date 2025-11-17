@@ -34,7 +34,10 @@ const COMMODITY_TYPES = [
 
 type CommodityType = (typeof COMMODITY_TYPES)[number]["value"];
 
-const COMMODITY_SUBTYPES: Record<CommodityType, { value: string; label: string }[]> = {
+const COMMODITY_SUBTYPES: Record<
+  CommodityType,
+  { value: string; label: string }[]
+> = {
   Paddy: [
     { value: "PADDY MOTA", label: "PADDY MOTA" },
     { value: "PADDY NEW", label: "PADDY NEW" },
@@ -67,14 +70,29 @@ const COMMODITY_SUBTYPES: Record<CommodityType, { value: string; label: string }
     { value: "PELLETS (8 MM RICE HUSK)", label: "PELLETS (8 MM RICE HUSK)" },
     { value: "PELLETS (8 MM SAW DUST)", label: "PELLETS (8 MM SAW DUST)" },
     { value: "PELLETS (8 MM GROUNDNUT)", label: "PELLETS (8 MM GROUNDNUT)" },
-    { value: "PELLETS (8 MM RICE HUSK & GROUNDNUT)", label: "PELLETS (8 MM RICE HUSK & GROUNDNUT)" },
+    {
+      value: "PELLETS (8 MM RICE HUSK & GROUNDNUT)",
+      label: "PELLETS (8 MM RICE HUSK & GROUNDNUT)",
+    },
     { value: "PELLETS (16 MM RICE HUSK)", label: "PELLETS (16 MM RICE HUSK)" },
     { value: "PELLETS (16 MM GROUNDNUT)", label: "PELLETS (16 MM GROUNDNUT)" },
-    { value: "PELLETS (16 MM RICE HUSK & GROUNDNUT)", label: "PELLETS (16 MM RICE HUSK & GROUNDNUT)" },
-    { value: "BRIQUETTE (90 MM RICE HUSK)", label: "BRIQUETTE (90 MM RICE HUSK)" },
-    { value: "BRIQUETTE (90 MM GROUNDNUT)", label: "BRIQUETTE (90 MM GROUNDNUT)" },
+    {
+      value: "PELLETS (16 MM RICE HUSK & GROUNDNUT)",
+      label: "PELLETS (16 MM RICE HUSK & GROUNDNUT)",
+    },
+    {
+      value: "BRIQUETTE (90 MM RICE HUSK)",
+      label: "BRIQUETTE (90 MM RICE HUSK)",
+    },
+    {
+      value: "BRIQUETTE (90 MM GROUNDNUT)",
+      label: "BRIQUETTE (90 MM GROUNDNUT)",
+    },
     { value: "BRIQUETTE (90 MM SAWDUST)", label: "BRIQUETTE (90 MM SAWDUST)" },
-    { value: "BRIQUETTE (90 MM RICE HUSK & GROUNDNUT)", label: "BRIQUETTE (90 MM RICE HUSK & GROUNDNUT)" },
+    {
+      value: "BRIQUETTE (90 MM RICE HUSK & GROUNDNUT)",
+      label: "BRIQUETTE (90 MM RICE HUSK & GROUNDNUT)",
+    },
   ],
   CMR: [
     { value: "CMR (FRK BOILED)", label: "CMR (FRK BOILED)" },
@@ -106,6 +124,8 @@ export default function GatePassModal({
     driverName: "",
     driverNumber: "",
     billDetails: "",
+    billWeight: "",
+    cmrNumber: "",
     transporterDetails: "",
     commodityType1: "",
     commoditySubType1: "",
@@ -116,6 +136,7 @@ export default function GatePassModal({
     totalPkts: "",
     totalQty: "",
     packetSize: "",
+    bhartiSize: "",
     netWeight: "",
     rate: "",
     invoiceValue: "",
@@ -134,13 +155,11 @@ export default function GatePassModal({
   useEffect(() => {
     if (isOpen) {
       const saved = JSON.parse(localStorage.getItem("gatePass") || "[]");
-      const recent = saved
-        .slice(-5)
-        .map((gp: any) => ({
-          id: gp.id,
-          gatepassSerialNo: gp.gatepassSerialNo,
-          date: gp.date,
-        }));
+      const recent = saved.slice(-5).map((gp: any) => ({
+        id: gp.id,
+        gatepassSerialNo: gp.gatepassSerialNo,
+        date: gp.date,
+      }));
       setHistory(recent);
     }
   }, [isOpen]);
@@ -158,6 +177,8 @@ export default function GatePassModal({
         driverName: initialData.driverName ?? "",
         driverNumber: initialData.driverNumber ?? "",
         billDetails: initialData.billDetails ?? "",
+        billWeight: initialData.billWeight ?? "",
+        cmrNumber: initialData.cmrNumber ?? "",
         transporterDetails: initialData.transporterDetails ?? "",
         commodityType1: initialData.commodityType1 ?? "",
         commoditySubType1: initialData.commoditySubType1 ?? "",
@@ -168,6 +189,7 @@ export default function GatePassModal({
         totalPkts: initialData.totalPkts ?? "",
         totalQty: initialData.totalQty ?? "",
         packetSize: initialData.packetSize ?? "",
+        bhartiSize: initialData.bhartiSize ?? "",
         netWeight: initialData.netWeight ?? "",
         rate: initialData.rate ?? "",
         invoiceValue: initialData.invoiceValue ?? "",
@@ -189,13 +211,15 @@ export default function GatePassModal({
     // reset
     setFormData({
       indentNo: "",
-      gatepassSerialNo: "",
+      gatepassSerialNo: `GP-${String(nextSerialNo + 1).padStart(3, "0")}`,
       date: new Date().toISOString().split("T")[0],
       partyName: "",
       vehicleNo: "",
       driverName: "",
       driverNumber: "",
       billDetails: "",
+      billWeight: "",
+      cmrNumber: "",
       transporterDetails: "",
       commodityType1: "",
       commoditySubType1: "",
@@ -206,6 +230,7 @@ export default function GatePassModal({
       totalPkts: "",
       totalQty: "",
       packetSize: "",
+      bhartiSize: "",
       netWeight: "",
       rate: "",
       invoiceValue: "",
@@ -269,8 +294,12 @@ export default function GatePassModal({
                         className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50 transition-colors"
                         onClick={() => loadHistoryItem(item.id)}
                       >
-                        <div className="font-medium">{item.gatepassSerialNo}</div>
-                        <div className="text-xs text-slate-500">{item.date}</div>
+                        <div className="font-medium">
+                          {item.gatepassSerialNo}
+                        </div>
+                        <div className="text-xs text-slate-500">
+                          {item.date}
+                        </div>
                       </button>
                     ))}
                   </div>
@@ -295,7 +324,23 @@ export default function GatePassModal({
         >
           <div className="space-y-6">
             {/* Responsive grid */}
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* ---- Date ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Date</label>
+                <input
+                  type="date"
+                  value={formData.date}
+                  onChange={(e) =>
+                    setFormData({ ...formData, date: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
               {/* ---- Indent No ---- */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Indent No</label>
@@ -307,16 +352,20 @@ export default function GatePassModal({
                   className="w-full px-4 py-2 border border-border rounded-lg bg-muted"
                 />
               </div>
-
               {/* ---- Gate Pass Serial No ---- */}
               <div className="space-y-1">
-                <label className="text-sm font-medium">Gate Pass Serial No</label>
+                <label className="text-sm font-medium">
+                  Gate Pass Serial No
+                </label>
                 <input
                   type="text"
                   placeholder="Gate Pass Serial No"
                   value={formData.gatepassSerialNo}
                   onChange={(e) =>
-                    setFormData({ ...formData, gatepassSerialNo: e.target.value })
+                    setFormData({
+                      ...formData,
+                      gatepassSerialNo: e.target.value,
+                    })
                   }
                   disabled={isViewMode}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
@@ -324,21 +373,6 @@ export default function GatePassModal({
                   }`}
                 />
               </div>
-
-              {/* ---- Date ---- */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Date</label>
-                <input
-                  type="date"
-                  value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  disabled={isViewMode}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : ""
-                  }`}
-                />
-              </div>
-
               {/* ---- Party Name ---- */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Party Name</label>
@@ -350,87 +384,6 @@ export default function GatePassModal({
                   className="w-full px-4 py-2 border border-border rounded-lg bg-muted"
                 />
               </div>
-
-              {/* ---- Vehicle No ---- */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Vehicle No</label>
-                <input
-                  type="text"
-                  placeholder="Vehicle No"
-                  value={formData.vehicleNo}
-                  onChange={(e) => setFormData({ ...formData, vehicleNo: e.target.value })}
-                  disabled={isViewMode}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : ""
-                  }`}
-                />
-              </div>
-
-              {/* ---- Transporter Type ---- */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Transporter Type</label>
-                <select
-                  value={formData.transporterDetails}
-                  onChange={(e) =>
-                    setFormData({ ...formData, transporterDetails: e.target.value })
-                  }
-                  disabled={isViewMode}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : "bg-white"
-                  }`}
-                >
-                  <option value="">Select Transporter Type</option>
-                  <option value="Transport Vehicle">Transport Vehicle</option>
-                  <option value="Party Vehicle">Party Vehicle</option>
-                  <option value="Company Vehicle">Company Vehicle</option>
-                </select>
-              </div>
-
-              {/* ---- Driver Name ---- */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Driver Name</label>
-                <input
-                  type="text"
-                  placeholder="Driver Name"
-                  value={formData.driverName}
-                  onChange={(e) => setFormData({ ...formData, driverName: e.target.value })}
-                  disabled={isViewMode}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : ""
-                  }`}
-                />
-              </div>
-
-              {/* ---- Driver Number ---- */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Driver Number</label>
-                <input
-                  type="text"
-                  placeholder="Driver's Contact Number"
-                  value={formData.driverNumber}
-                  onChange={(e) => setFormData({ ...formData, driverNumber: e.target.value })}
-                  disabled={isViewMode}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : ""
-                  }`}
-                />
-              </div>
-
-              {/* ---- Bill Details ---- */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Bill Details</label>
-                <input
-                  type="text"
-                  placeholder="Bill/Invoice Details"
-                  value={formData.billDetails}
-                  onChange={(e) => setFormData({ ...formData, billDetails: e.target.value })}
-                  disabled={isViewMode}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : ""
-                  }`}
-                />
-              </div>
-
               {/* ==================== COMMODITY 1 ==================== */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Commodity Type 1</label>
@@ -457,21 +410,29 @@ export default function GatePassModal({
                   ))}
                 </select>
               </div>
-
               <div className="space-y-1">
-                <label className="text-sm font-medium">Commodity Sub-Type 1</label>
+                <label className="text-sm font-medium">
+                  Commodity Sub-Type 1
+                </label>
                 <select
                   value={formData.commoditySubType1}
                   onChange={(e) =>
-                    setFormData({ ...formData, commoditySubType1: e.target.value })
+                    setFormData({
+                      ...formData,
+                      commoditySubType1: e.target.value,
+                    })
                   }
                   disabled={isViewMode || !formData.commodityType1}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode || !formData.commodityType1 ? "bg-muted" : "bg-white"
+                    isViewMode || !formData.commodityType1
+                      ? "bg-muted"
+                      : "bg-white"
                   }`}
                 >
                   <option value="">
-                    {formData.commodityType1 ? "Select Sub-Type" : "Select Type First"}
+                    {formData.commodityType1
+                      ? "Select Sub-Type"
+                      : "Select Type First"}
                   </option>
                   {getSubTypes(formData.commodityType1).map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -480,7 +441,6 @@ export default function GatePassModal({
                   ))}
                 </select>
               </div>
-
               {/* ==================== COMMODITY 2 ==================== */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Commodity Type 2</label>
@@ -507,21 +467,29 @@ export default function GatePassModal({
                   ))}
                 </select>
               </div>
-
               <div className="space-y-1">
-                <label className="text-sm font-medium">Commodity Sub-Type 2</label>
+                <label className="text-sm font-medium">
+                  Commodity Sub-Type 2
+                </label>
                 <select
                   value={formData.commoditySubType2}
                   onChange={(e) =>
-                    setFormData({ ...formData, commoditySubType2: e.target.value })
+                    setFormData({
+                      ...formData,
+                      commoditySubType2: e.target.value,
+                    })
                   }
                   disabled={isViewMode || !formData.commodityType2}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode || !formData.commodityType2 ? "bg-muted" : "bg-white"
+                    isViewMode || !formData.commodityType2
+                      ? "bg-muted"
+                      : "bg-white"
                   }`}
                 >
                   <option value="">
-                    {formData.commodityType2 ? "Select Sub-Type" : "Select Type First"}
+                    {formData.commodityType2
+                      ? "Select Sub-Type"
+                      : "Select Type First"}
                   </option>
                   {getSubTypes(formData.commodityType2).map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -530,7 +498,6 @@ export default function GatePassModal({
                   ))}
                 </select>
               </div>
-
               {/* ==================== COMMODITY 3 ==================== */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Commodity Type 3</label>
@@ -557,21 +524,29 @@ export default function GatePassModal({
                   ))}
                 </select>
               </div>
-
               <div className="space-y-1">
-                <label className="text-sm font-medium">Commodity Sub-Type 3</label>
+                <label className="text-sm font-medium">
+                  Commodity Sub-Type 3
+                </label>
                 <select
                   value={formData.commoditySubType3}
                   onChange={(e) =>
-                    setFormData({ ...formData, commoditySubType3: e.target.value })
+                    setFormData({
+                      ...formData,
+                      commoditySubType3: e.target.value,
+                    })
                   }
                   disabled={isViewMode || !formData.commodityType3}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode || !formData.commodityType3 ? "bg-muted" : "bg-white"
+                    isViewMode || !formData.commodityType3
+                      ? "bg-muted"
+                      : "bg-white"
                   }`}
                 >
                   <option value="">
-                    {formData.commodityType3 ? "Select Sub-Type" : "Select Type First"}
+                    {formData.commodityType3
+                      ? "Select Sub-Type"
+                      : "Select Type First"}
                   </option>
                   {getSubTypes(formData.commodityType3).map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -580,7 +555,44 @@ export default function GatePassModal({
                   ))}
                 </select>
               </div>
-
+              {/* ---- Transporter Type ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Transporter Type</label>
+                <select
+                  value={formData.transporterDetails}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      transporterDetails: e.target.value,
+                    })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : "bg-white"
+                  }`}
+                >
+                  <option value="">Select Transporter Type</option>
+                  <option value="Transport Vehicle">Transport Vehicle</option>
+                  <option value="Party Vehicle">Party Vehicle</option>
+                  <option value="Company Vehicle">Company Vehicle</option>
+                </select>
+              </div>
+              {/* ---- Vehicle No ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Vehicle No</label>
+                <input
+                  type="text"
+                  placeholder="Vehicle No"
+                  value={formData.vehicleNo}
+                  onChange={(e) =>
+                    setFormData({ ...formData, vehicleNo: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
               {/* ---- Total PKTS ---- */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Total PKTS</label>
@@ -588,44 +600,31 @@ export default function GatePassModal({
                   type="text"
                   placeholder="Total PKTS"
                   value={formData.totalPkts}
-                  onChange={(e) => setFormData({ ...formData, totalPkts: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, totalPkts: e.target.value })
+                  }
                   disabled={isViewMode}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
                     isViewMode ? "bg-muted" : ""
                   }`}
                 />
               </div>
-
-              {/* ---- Total Quantity ---- */}
+              {/* ---- Bharti Size ---- */}
               <div className="space-y-1">
-                <label className="text-sm font-medium">Total Quantity</label>
+                <label className="text-sm font-medium">Bharti Size</label>
                 <input
                   type="text"
-                  placeholder="Total Quantity"
-                  value={formData.totalQty}
-                  onChange={(e) => setFormData({ ...formData, totalQty: e.target.value })}
+                  placeholder="Bharti Size"
+                  value={formData.bhartiSize}
+                  onChange={(e) =>
+                    setFormData({ ...formData, bhartiSize: e.target.value })
+                  }
                   disabled={isViewMode}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
                     isViewMode ? "bg-muted" : ""
                   }`}
                 />
               </div>
-
-              {/* ---- Size of Packets ---- */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Size of Packets</label>
-                <input
-                  type="text"
-                  placeholder="Size of Packets"
-                  value={formData.packetSize}
-                  onChange={(e) => setFormData({ ...formData, packetSize: e.target.value })}
-                  disabled={isViewMode}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : ""
-                  }`}
-                />
-              </div>
-
               {/* ---- Net Weight ---- */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Net Weight (kg)</label>
@@ -633,14 +632,15 @@ export default function GatePassModal({
                   type="number"
                   placeholder="Net Weight"
                   value={formData.netWeight}
-                  onChange={(e) => setFormData({ ...formData, netWeight: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, netWeight: e.target.value })
+                  }
                   disabled={isViewMode}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
                     isViewMode ? "bg-muted" : ""
                   }`}
                 />
               </div>
-
               {/* ---- Rate ---- */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Rate (₹)</label>
@@ -648,43 +648,181 @@ export default function GatePassModal({
                   type="number"
                   placeholder="Rate per unit"
                   value={formData.rate}
-                  onChange={(e) => setFormData({ ...formData, rate: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, rate: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>{" "}
+              {/* ---- Bill Details ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Bill Details</label>
+                <input
+                  type="text"
+                  placeholder="Bill/Invoice Details"
+                  value={formData.billDetails}
+                  onChange={(e) =>
+                    setFormData({ ...formData, billDetails: e.target.value })
+                  }
                   disabled={isViewMode}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
                     isViewMode ? "bg-muted" : ""
                   }`}
                 />
               </div>
-
-              {/* ---- Invoice Value ---- */}
+              {/* ---- Bill Weight ---- */}
               <div className="space-y-1">
-                <label className="text-sm font-medium">Invoice Value (₹)</label>
+                <label className="text-sm font-medium">Bill Weight (kg)</label>
                 <input
                   type="number"
-                  placeholder="Invoice Value"
-                  value={formData.invoiceValue}
-                  onChange={(e) => setFormData({ ...formData, invoiceValue: e.target.value })}
+                  placeholder="Bill Weight"
+                  value={formData.billWeight}
+                  onChange={(e) =>
+                    setFormData({ ...formData, billWeight: e.target.value })
+                  }
                   disabled={isViewMode}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
                     isViewMode ? "bg-muted" : ""
                   }`}
                 />
               </div>
-
-              {/* ---- Invoice Number ---- */}
+                            {/* ---- Invoice Number ---- */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Invoice Number</label>
                 <input
                   type="text"
                   placeholder="Invoice Number"
                   value={formData.invoiceNumber}
-                  onChange={(e) => setFormData({ ...formData, invoiceNumber: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, invoiceNumber: e.target.value })
+                  }
                   disabled={isViewMode}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
                     isViewMode ? "bg-muted" : ""
                   }`}
                 />
               </div>
+                            {/* ---- Invoice Value ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Invoice Value (₹)</label>
+                <input
+                  type="number"
+                  placeholder="Invoice Value"
+                  value={formData.invoiceValue}
+                  onChange={(e) =>
+                    setFormData({ ...formData, invoiceValue: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+              {/* ---- Driver Name ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Driver Name</label>
+                <input
+                  type="text"
+                  placeholder="Driver Name"
+                  value={formData.driverName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, driverName: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+              {/* ---- Driver Number ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Driver Number</label>
+                <input
+                  type="text"
+                  placeholder="Driver's Contact Number"
+                  value={formData.driverNumber}
+                  onChange={(e) =>
+                    setFormData({ ...formData, driverNumber: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+                            {/* ---- Unloading Weight ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">
+                  Unloading Weight (kg)
+                </label>
+                <input
+                  type="number"
+                  placeholder="Unloading Weight"
+                  value={formData.unloadingWeight}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      unloadingWeight: e.target.value,
+                    })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+              {/* ---- CMR Number ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">CMR Number</label>
+                <input
+                  type="text"
+                  placeholder="CMR/Consignment Note Number"
+                  value={formData.cmrNumber}
+                  onChange={(e) =>
+                    setFormData({ ...formData, cmrNumber: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+              {/* ---- Total Quantity ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Total Quantity</label>
+                <input
+                  type="text"
+                  placeholder="Total Quantity"
+                  value={formData.totalQty}
+                  onChange={(e) =>
+                    setFormData({ ...formData, totalQty: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+              {/* ---- Size of Packets ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Size of Packets</label>
+                <input
+                  type="text"
+                  placeholder="Size of Packets"
+                  value={formData.packetSize}
+                  onChange={(e) =>
+                    setFormData({ ...formData, packetSize: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+
 
               {/* ---- Lot ---- */}
               <div className="space-y-1">
@@ -693,23 +831,8 @@ export default function GatePassModal({
                   type="text"
                   placeholder="Lot Number"
                   value={formData.lot}
-                  onChange={(e) => setFormData({ ...formData, lot: e.target.value })}
-                  disabled={isViewMode}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : ""
-                  }`}
-                />
-              </div>
-
-              {/* ---- Unloading Weight ---- */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Unloading Weight (kg)</label>
-                <input
-                  type="number"
-                  placeholder="Unloading Weight"
-                  value={formData.unloadingWeight}
                   onChange={(e) =>
-                    setFormData({ ...formData, unloadingWeight: e.target.value })
+                    setFormData({ ...formData, lot: e.target.value })
                   }
                   disabled={isViewMode}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
@@ -717,6 +840,7 @@ export default function GatePassModal({
                   }`}
                 />
               </div>
+
             </div>
           </div>
         </form>

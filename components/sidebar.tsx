@@ -43,10 +43,10 @@ export default function Sidebar() {
         </Button>
       </div>
 
-      {/* Backdrop Overlay */}
+      {/* Backdrop for mobile */}
       {isOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 transition-all duration-300"
+          className="md:hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40"
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -55,18 +55,17 @@ export default function Sidebar() {
       <aside
         className={`
           fixed md:static inset-y-0 left-0 z-40 w-80
-          bg-white border-r border-slate-200
-          text-slate-900 shadow-lg
+          bg-white border-r border-slate-200 text-slate-900 shadow-lg
           flex flex-col
-          transform transition-all duration-500 ease-out
-          ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+          transition-all duration-300
+          ${
+            isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0" // Desktop always visible
+          }
         `}
       >
         {/* Header */}
         <div className="p-6 border-b border-slate-200 bg-slate-50">
-          <h2 className="text-4xl font-bold text-slate-900 mb-1">
-            FMS
-          </h2>
+          <h2 className="text-4xl font-bold text-slate-900 mb-1">FMS</h2>
           <p className="text-sm font-medium text-slate-600">
             Fleet Management System
           </p>
@@ -83,7 +82,7 @@ export default function Sidebar() {
                 key={item.href}
                 onClick={() => {
                   router.push(item.href);
-                  setIsOpen(false);
+                  setIsOpen(false); // closes only on mobile
                 }}
                 className="w-full"
               >
@@ -91,7 +90,6 @@ export default function Sidebar() {
                   className={`
                     group relative flex items-center gap-3 px-4 py-4 rounded-xl
                     font-semibold text-sm transition-all duration-200 cursor-pointer
-                    overflow-hidden
                     ${
                       isActive
                         ? "bg-blue-600 text-white shadow-md"
@@ -99,18 +97,14 @@ export default function Sidebar() {
                     }
                   `}
                 >
-                  <div className="relative z-10">
-                    <Icon
-                      className={`w-6 h-6 transition-all duration-300 ${
-                        isActive
-                          ? "text-white"
-                          : "text-slate-500 group-hover:text-slate-700"
-                      }`}
-                    />
-                  </div>
-
-                  {/* Label */}
-                  <span className="relative z-10">{item.label}</span>
+                  <Icon
+                    className={`w-6 h-6 ${
+                      isActive
+                        ? "text-white"
+                        : "text-slate-500 group-hover:text-slate-700"
+                    }`}
+                  />
+                  <span>{item.label}</span>
                 </div>
               </button>
             );
@@ -128,7 +122,6 @@ export default function Sidebar() {
           </Button>
         </div>
 
-        {/* Decorative Bottom */}
         <div className="h-1 bg-slate-200" />
       </aside>
     </>
