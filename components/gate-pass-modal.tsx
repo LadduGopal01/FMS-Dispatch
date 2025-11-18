@@ -566,6 +566,38 @@ export default function GatePassModal({
                   }`}
                 />
               </div>
+                            {/* ---- Total Quantity ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Total Quantity</label>
+                <input
+                  type="text"
+                  placeholder="Total Quantity"
+                  value={formData.totalQty}
+                  onChange={(e) =>
+                    setFormData({ ...formData, totalQty: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
+              {/* ---- Size of Packets ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Size of Packets</label>
+                <input
+                  type="text"
+                  placeholder="Size of Packets"
+                  value={formData.packetSize}
+                  onChange={(e) =>
+                    setFormData({ ...formData, packetSize: e.target.value })
+                  }
+                  disabled={isViewMode}
+                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    isViewMode ? "bg-muted" : ""
+                  }`}
+                />
+              </div>
               {/* ---- Rate ---- */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Rate (₹)</label>
@@ -715,38 +747,7 @@ export default function GatePassModal({
                   }`}
                 />
               </div>
-              {/* ---- Total Quantity ---- */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Total Quantity</label>
-                <input
-                  type="text"
-                  placeholder="Total Quantity"
-                  value={formData.totalQty}
-                  onChange={(e) =>
-                    setFormData({ ...formData, totalQty: e.target.value })
-                  }
-                  disabled={isViewMode}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : ""
-                  }`}
-                />
-              </div>
-              {/* ---- Size of Packets ---- */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Size of Packets</label>
-                <input
-                  type="text"
-                  placeholder="Size of Packets"
-                  value={formData.packetSize}
-                  onChange={(e) =>
-                    setFormData({ ...formData, packetSize: e.target.value })
-                  }
-                  disabled={isViewMode}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : ""
-                  }`}
-                />
-              </div>
+
               {/* ---- Lot ---- */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Lot Number</label>
