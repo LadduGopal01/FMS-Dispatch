@@ -390,11 +390,9 @@ export default function GatePassPage() {
                               "Driver Number",
                               "Bill Details",
                               "Transporter",
-                              "Commodity 1",
+                              "Commodity Type",
                               "C1 Sub", // NEW
-                              "Commodity 2",
                               "C2 Sub", // NEW
-                              "Commodity 3",
                               "C3 Sub", // NEW
                               "Total Pkts",
                               "Total Qty",
@@ -442,25 +440,17 @@ export default function GatePassPage() {
                                 {item.transporterDetails || "-"}
                               </td>
 
-                              {/* Commodity 1 */}
+                              {/* Commodity 1 Type and Subtype */}
                               <td className="px-3 py-3">
-                                {item.commodityType1 || "-"}
+                                {item.commodityType || "-"}
                               </td>
                               <td className="px-3 py-3">
                                 {item.commoditySubType1 || "-"}
                               </td>
 
-                              {/* Commodity 2 */}
-                              <td className="px-3 py-3">
-                                {item.commodityType2 || "-"}
-                              </td>
+                              {/* Only show sub-types for Commodity 2 and 3 */}
                               <td className="px-3 py-3">
                                 {item.commoditySubType2 || "-"}
-                              </td>
-
-                              {/* Commodity 3 */}
-                              <td className="px-3 py-3">
-                                {item.commodityType3 || "-"}
                               </td>
                               <td className="px-3 py-3">
                                 {item.commoditySubType3 || "-"}

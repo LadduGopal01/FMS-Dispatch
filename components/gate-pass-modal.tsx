@@ -15,7 +15,7 @@ interface GatePassModalProps {
 }
 
 /* ============================================================= */
-/*  COMMODITY DATA – 12 Types + Sub-Types                        */
+/*  COMMODITY DATA – 1 Type with 3 Sub-Types                     */
 /* ============================================================= */
 const COMMODITY_TYPES = [
   { value: "Paddy", label: "Paddy" },
@@ -28,8 +28,6 @@ const COMMODITY_TYPES = [
   { value: "Husk", label: "Husk" },
   { value: "Mota Kunda", label: "Mota Kunda" },
   { value: "Gunny", label: "Gunny" },
-  { value: "Plastic Pkt", label: "Plastic Pkt" },
-  { value: "Jute Pkt", label: "Jute Pkt" },
 ] as const;
 
 type CommodityType = (typeof COMMODITY_TYPES)[number]["value"];
@@ -39,60 +37,9 @@ const COMMODITY_SUBTYPES: Record<
   { value: string; label: string }[]
 > = {
   Paddy: [
-    { value: "PADDY MOTA", label: "PADDY MOTA" },
-    { value: "PADDY NEW", label: "PADDY NEW" },
-    { value: "PADDY IR", label: "PADDY IR" },
-  ],
-  "Muri Rice": [{ value: "MURI RICE", label: "MURI RICE" }],
-  Rice: [
-    { value: "RICE (FRK BOILED)", label: "RICE (FRK BOILED)" },
-    { value: "RICE (NON FRK BOILED)", label: "RICE (NON FRK BOILED)" },
-    { value: "RICE (FRK RAW)", label: "RICE (FRK RAW)" },
-    { value: "RICE (NON FRK RAW)", label: "RICE (NON FRK RAW)" },
-    { value: "BROKEN (RAW SORTEX)", label: "BROKEN (RAW SORTEX)" },
-    { value: "BROKEN (RAW NON SORTEX)", label: "BROKEN (RAW NON SORTEX)" },
-    { value: "BROKEN (BOILED)", label: "BROKEN (BOILED)" },
-    { value: "RICE BRAN (BOILED)", label: "RICE BRAN (BOILED)" },
-    { value: "RICE BRAN (RAW)", label: "RICE BRAN (RAW)" },
-    { value: "RICE BRAN (MURI)", label: "RICE BRAN (MURI)" },
-    { value: "RICE BRAN (MURI SILKY)", label: "RICE BRAN (MURI SILKY)" },
-  ],
-  "Solvent Plant": [
-    { value: "KAJU CHILKA", label: "KAJU CHILKA" },
-    { value: "RAKHAD", label: "RAKHAD" },
-  ],
-  Rejection: [
-    { value: "REJECTION (BOILED)", label: "REJECTION (BOILED)" },
-    { value: "REJECTION (RAW)", label: "REJECTION (RAW)" },
-    { value: "REJECTION (MURI)", label: "REJECTION (MURI)" },
-  ],
-  Biomass: [
-    { value: "PELLETS (8 MM RICE HUSK)", label: "PELLETS (8 MM RICE HUSK)" },
-    { value: "PELLETS (8 MM SAW DUST)", label: "PELLETS (8 MM SAW DUST)" },
-    { value: "PELLETS (8 MM GROUNDNUT)", label: "PELLETS (8 MM GROUNDNUT)" },
-    {
-      value: "PELLETS (8 MM RICE HUSK & GROUNDNUT)",
-      label: "PELLETS (8 MM RICE HUSK & GROUNDNUT)",
-    },
-    { value: "PELLETS (16 MM RICE HUSK)", label: "PELLETS (16 MM RICE HUSK)" },
-    { value: "PELLETS (16 MM GROUNDNUT)", label: "PELLETS (16 MM GROUNDNUT)" },
-    {
-      value: "PELLETS (16 MM RICE HUSK & GROUNDNUT)",
-      label: "PELLETS (16 MM RICE HUSK & GROUNDNUT)",
-    },
-    {
-      value: "BRIQUETTE (90 MM RICE HUSK)",
-      label: "BRIQUETTE (90 MM RICE HUSK)",
-    },
-    {
-      value: "BRIQUETTE (90 MM GROUNDNUT)",
-      label: "BRIQUETTE (90 MM GROUNDNUT)",
-    },
-    { value: "BRIQUETTE (90 MM SAWDUST)", label: "BRIQUETTE (90 MM SAWDUST)" },
-    {
-      value: "BRIQUETTE (90 MM RICE HUSK & GROUNDNUT)",
-      label: "BRIQUETTE (90 MM RICE HUSK & GROUNDNUT)",
-    },
+    { value: "Paddy Mota", label: "PADDY MOTA" },
+    { value: "Paddy New", label: "PADDY NEW" },
+    { value: "Paddy IR", label: "PADDY IR" },
   ],
   CMR: [
     { value: "CMR (FRK BOILED)", label: "CMR (FRK BOILED)" },
@@ -100,11 +47,66 @@ const COMMODITY_SUBTYPES: Record<
     { value: "CMR (FRK RAW)", label: "CMR (FRK RAW)" },
     { value: "CMR (NON FRK RAW)", label: "CMR (NON FRK RAW)" },
   ],
-  Husk: [{ value: "HUSK", label: "HUSK" }],
-  "Mota Kunda": [{ value: "MOTA KUNDA", label: "MOTA KUNDA" }],
-  Gunny: [{ value: "JUTE PKT", label: "JUTE PKT" }],
-  "Plastic Pkt": [{ value: "PLASTIC PKT", label: "PLASTIC PKT" }],
-  "Jute Pkt": [{ value: "JUTE PKT", label: "JUTE PKT" }],
+  Rice: [
+    { value: "Rice (FRK BOILED)", label: "RICE (FRK BOILED)" },
+    { value: "Rice (NON FRK BOILED)", label: "RICE (NON FRK BOILED)" },
+    { value: "Rice (FRK RAW)", label: "RICE (FRK RAW)" },
+    { value: "Rice (NON FRK RAW)", label: "RICE (NON FRK RAW)" },
+    { value: "Muri Rice", label: "MURI RICE" },
+  ],
+  Rejection: [
+    { value: "Rejection (Boiled)", label: "REJECTION (BOILED)" },
+    { value: "Rejection (Raw)", label: "REJECTION (RAW)" },
+    { value: "Rejection (Muri)", label: "REJECTION (MURI)" },
+  ],
+  "Solvent Plant": [
+    { value: "Broken (Raw Sortex)", label: "BROKEN (RAW SORTEX)" },
+    { value: "Broken (Raw Non Sortex)", label: "BROKEN (RAW NON SORTEX)" },
+    { value: "Broken (Boiled)", label: "BROKEN (BOILED)" },
+    { value: "Rice Bran (Boiled)", label: "RICE BRAN (BOILED)" },
+    { value: "Rice Bran (Raw)", label: "RICE BRAN (RAW)" },
+    { value: "Rice Bran (Muri)", label: "RICE BRAN (MURI)" },
+    { value: "Rice Bran (Muri Silky)", label: "RICE BRAN (MURI SILKY)" },
+  ],
+  Husk: [
+    { value: "Husk", label: "HUSK" },
+    { value: "Pellets (8mm Rice Husk)", label: "PELLETS (8 MM RICE HUSK)" },
+    { value: "Pellets (8mm Saw Dust)", label: "PELLETS (8 MM SAW DUST)" },
+    { value: "Pellets (8mm Groundnut)", label: "PELLETS (8 MM GROUNDNUT)" },
+    {
+      value: "Pellets (8mm Rice Husk & Groundnut)",
+      label: "PELLETS (8 MM RICE HUSK & GROUNDNUT)",
+    },
+    { value: "Pellets (16mm Rice Husk)", label: "PELLETS (16 MM RICE HUSK)" },
+    { value: "Pellets (16mm Groundnut)", label: "PELLETS (16 MM GROUNDNUT)" },
+    {
+      value: "Pellets (16mm Rice Husk & Groundnut)",
+      label: "PELLETS (16 MM RICE HUSK & GROUNDNUT)",
+    },
+    {
+      value: "Briquette (90mm Rice Husk)",
+      label: "BRIQUETTE (90 MM RICE HUSK)",
+    },
+    {
+      value: "Briquette (90mm Groundnut)",
+      label: "BRIQUETTE (90 MM GROUNDNUT)",
+    },
+    { value: "Briquette (90mm Sawdust)", label: "BRIQUETTE (90 MM SAWDUST)" },
+    {
+      value: "Briquette (90mm Rice Husk & Groundnut)",
+      label: "BRIQUETTE (90 MM RICE HUSK & GROUNDNUT)",
+    },
+  ],
+  Biomass: [
+    { value: "Kaju Chilka", label: "KAJU CHILKA" },
+    { value: "Rakhad", label: "RAKHAD" },
+  ],
+  Gunny: [
+    { value: "Plastic Pkt", label: "PLASTIC PKT" },
+    { value: "Jute Pkt", label: "JUTE PKT" },
+  ],
+  "Mota Kunda": [{ value: "Mota Kunda", label: "MOTA KUNDA" }],
+  "Muri Rice": [{ value: "Muri Rice", label: "MURI RICE" }],
 };
 
 /* ============================================================= */
@@ -127,11 +129,9 @@ export default function GatePassModal({
     billWeight: "",
     cmrNumber: "",
     transporterDetails: "",
-    commodityType1: "",
+    commodityType: "",
     commoditySubType1: "",
-    commodityType2: "",
     commoditySubType2: "",
-    commodityType3: "",
     commoditySubType3: "",
     totalPkts: "",
     totalQty: "",
@@ -180,12 +180,8 @@ export default function GatePassModal({
         billWeight: initialData.billWeight ?? "",
         cmrNumber: initialData.cmrNumber ?? "",
         transporterDetails: initialData.transporterDetails ?? "",
-        commodityType1: initialData.commodityType1 ?? "",
-        commoditySubType1: initialData.commoditySubType1 ?? "",
-        commodityType2: initialData.commodityType2 ?? "",
-        commoditySubType2: initialData.commoditySubType2 ?? "",
-        commodityType3: initialData.commodityType3 ?? "",
-        commoditySubType3: initialData.commoditySubType3 ?? "",
+        commodityType: initialData.commodityType ?? "",
+        commoditySubType: initialData.commoditySubType ?? "",
         totalPkts: initialData.totalPkts ?? "",
         totalQty: initialData.totalQty ?? "",
         packetSize: initialData.packetSize ?? "",
@@ -221,12 +217,8 @@ export default function GatePassModal({
       billWeight: "",
       cmrNumber: "",
       transporterDetails: "",
-      commodityType1: "",
-      commoditySubType1: "",
-      commodityType2: "",
-      commoditySubType2: "",
-      commodityType3: "",
-      commoditySubType3: "",
+      commodityType: "",
+      commoditySubType: "",
       totalPkts: "",
       totalQty: "",
       packetSize: "",
@@ -243,11 +235,10 @@ export default function GatePassModal({
 
   if (!isOpen) return null;
 
-  /* --------------------- Helper: Sub-Type Options --------------------- */
-  const getSubTypes = (type: string) =>
-    type && COMMODITY_SUBTYPES[type as CommodityType]
-      ? COMMODITY_SUBTYPES[type as CommodityType]
-      : [];
+  /* --------------------- Get All Sub-Types --------------------- */
+  const getAllSubTypes = () => {
+    return Object.values(COMMODITY_SUBTYPES).flat();
+  };
 
   /* --------------------- Load Full History Item --------------------- */
   const loadHistoryItem = (id: string) => {
@@ -384,180 +375,33 @@ export default function GatePassModal({
                   className="w-full px-4 py-2 border border-border rounded-lg bg-muted"
                 />
               </div>
-              {/* ==================== COMMODITY 1 ==================== */}
+              {/* ---- Commodity Type (Optional) ---- */}
               <div className="space-y-1">
-                <label className="text-sm font-medium">Commodity Type 1</label>
+                <label className="text-sm font-medium">Commodity Type</label>
                 <select
-                  value={formData.commodityType1}
+                  value={formData.commodityType}
                   onChange={(e) => {
-                    const val = e.target.value;
                     setFormData({
                       ...formData,
-                      commodityType1: val,
-                      commoditySubType1: "",
+                      commodityType: e.target.value,
                     });
                   }}
                   disabled={isViewMode}
                   className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : "bg-white"
+                    isViewMode ? "bg-muted" : ""
                   }`}
                 >
-                  <option value="">Select Type</option>
-                  {COMMODITY_TYPES.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium">
-                  Commodity Sub-Type 1
-                </label>
-                <select
-                  value={formData.commoditySubType1}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      commoditySubType1: e.target.value,
-                    })
-                  }
-                  disabled={isViewMode || !formData.commodityType1}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode || !formData.commodityType1
-                      ? "bg-muted"
-                      : "bg-white"
-                  }`}
-                >
-                  <option value="">
-                    {formData.commodityType1
-                      ? "Select Sub-Type"
-                      : "Select Type First"}
-                  </option>
-                  {getSubTypes(formData.commodityType1).map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {/* ==================== COMMODITY 2 ==================== */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Commodity Type 2</label>
-                <select
-                  value={formData.commodityType2}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setFormData({
-                      ...formData,
-                      commodityType2: val,
-                      commoditySubType2: "",
-                    });
-                  }}
-                  disabled={isViewMode}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : "bg-white"
-                  }`}
-                >
-                  <option value="">Select Type</option>
-                  {COMMODITY_TYPES.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium">
-                  Commodity Sub-Type 2
-                </label>
-                <select
-                  value={formData.commoditySubType2}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      commoditySubType2: e.target.value,
-                    })
-                  }
-                  disabled={isViewMode || !formData.commodityType2}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode || !formData.commodityType2
-                      ? "bg-muted"
-                      : "bg-white"
-                  }`}
-                >
-                  <option value="">
-                    {formData.commodityType2
-                      ? "Select Sub-Type"
-                      : "Select Type First"}
-                  </option>
-                  {getSubTypes(formData.commodityType2).map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {/* ==================== COMMODITY 3 ==================== */}
-              <div className="space-y-1">
-                <label className="text-sm font-medium">Commodity Type 3</label>
-                <select
-                  value={formData.commodityType3}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setFormData({
-                      ...formData,
-                      commodityType3: val,
-                      commoditySubType3: "",
-                    });
-                  }}
-                  disabled={isViewMode}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode ? "bg-muted" : "bg-white"
-                  }`}
-                >
-                  <option value="">Select Type</option>
-                  {COMMODITY_TYPES.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="space-y-1">
-                <label className="text-sm font-medium">
-                  Commodity Sub-Type 3
-                </label>
-                <select
-                  value={formData.commoditySubType3}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      commoditySubType3: e.target.value,
-                    })
-                  }
-                  disabled={isViewMode || !formData.commodityType3}
-                  className={`w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    isViewMode || !formData.commodityType3
-                      ? "bg-muted"
-                      : "bg-white"
-                  }`}
-                >
-                  <option value="">
-                    {formData.commodityType3
-                      ? "Select Sub-Type"
-                      : "Select Type First"}
-                  </option>
-                  {getSubTypes(formData.commodityType3).map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
+                  <option value="">Select Type (Optional)</option>
+                  {COMMODITY_TYPES.map((type) => (
+                    <option key={type.value} value={type.value}>
+                      {type.label}
                     </option>
                   ))}
                 </select>
               </div>
               {/* ---- Transporter Type ---- */}
               <div className="space-y-1">
-                <label className="text-sm font-medium">Transporter Type</label>
+                <label className="text-sm font-medium">Vechile Type</label>
                 <select
                   value={formData.transporterDetails}
                   onChange={(e) =>
@@ -592,6 +436,87 @@ export default function GatePassModal({
                     isViewMode ? "bg-muted" : ""
                   }`}
                 />
+              </div>
+              {/* ---- Commodity Sub-Type 1 ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">
+                  Commodity Sub-Type 1
+                </label>
+                <select
+                  value={formData.commoditySubType1}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      commoditySubType1: e.target.value,
+                    })
+                  }
+                  disabled={isViewMode}
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                >
+                  <option value="">Select Sub-Type 1</option>
+                  {getAllSubTypes().map((subtype, index) => (
+                    <option
+                      key={`${subtype.value}-1-${index}`}
+                      value={subtype.value}
+                    >
+                      {subtype.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {/* ---- Commodity Sub-Type 2 ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">
+                  Commodity Sub-Type 2
+                </label>
+                <select
+                  value={formData.commoditySubType2}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      commoditySubType2: e.target.value,
+                    })
+                  }
+                  disabled={isViewMode}
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                >
+                  <option value="">Select Sub-Type 2</option>
+                  {getAllSubTypes().map((subtype, index) => (
+                    <option
+                      key={`${subtype.value}-2-${index}`}
+                      value={subtype.value}
+                    >
+                      {subtype.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {/* ---- Commodity Sub-Type 3 ---- */}
+              <div className="space-y-1">
+                <label className="text-sm font-medium">
+                  Commodity Sub-Type 3
+                </label>
+                <select
+                  value={formData.commoditySubType3}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      commoditySubType3: e.target.value,
+                    })
+                  }
+                  disabled={isViewMode}
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                >
+                  <option value="">Select Sub-Type 3</option>
+                  {getAllSubTypes().map((subtype, index) => (
+                    <option
+                      key={`${subtype.value}-3-${index}`}
+                      value={subtype.value}
+                    >
+                      {subtype.label}
+                    </option>
+                  ))}
+                </select>
               </div>
               {/* ---- Total PKTS ---- */}
               <div className="space-y-1">
@@ -689,7 +614,7 @@ export default function GatePassModal({
                   }`}
                 />
               </div>
-                            {/* ---- Invoice Number ---- */}
+              {/* ---- Invoice Number ---- */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Invoice Number</label>
                 <input
@@ -705,7 +630,7 @@ export default function GatePassModal({
                   }`}
                 />
               </div>
-                            {/* ---- Invoice Value ---- */}
+              {/* ---- Invoice Value ---- */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Invoice Value (₹)</label>
                 <input
@@ -753,7 +678,7 @@ export default function GatePassModal({
                   }`}
                 />
               </div>
-                            {/* ---- Unloading Weight ---- */}
+              {/* ---- Unloading Weight ---- */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">
                   Unloading Weight (kg)
@@ -822,8 +747,6 @@ export default function GatePassModal({
                   }`}
                 />
               </div>
-
-
               {/* ---- Lot ---- */}
               <div className="space-y-1">
                 <label className="text-sm font-medium">Lot Number</label>
@@ -840,7 +763,6 @@ export default function GatePassModal({
                   }`}
                 />
               </div>
-
             </div>
           </div>
         </form>
